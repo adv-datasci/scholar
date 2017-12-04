@@ -1,0 +1,88 @@
+---
+title: "web scraping — class information"
+author: "Yue Cao"
+output: html_document
+---
+
+Scraping course information from JHSPH
+```{r}
+ setwd("~/Desktop/advdatasience_term2/webscraping_class")
+library(rvest)
+library(stringr)
+library(dplyr)
+library(knitr)
+
+options(stringsAsFactors = FALSE)
+# df <- data.frame()
+# 
+# dep <-c("Biochemistry and Molecular Biology", "Biostatistics", 
+#                "Environmental Health and Engineering","Epidemiology",
+#                "Health Policy and Management", "Health, Behavior and Society",
+#                "International Health","Mental Health", 
+#                "Molecular Microbiology and Immunology", "Population, Family and Reproductive Health")
+# urls <- paste0("https://www.jhsph.edu/faculty/directory/list/?department=", c(2:10,12))
+
+
+rawtxt <- readLines("https://www.jhsph.edu/faculty/directory/facultyList.cfc?method=getFacultyList")
+splittxt <- gsub("[\\{\\}]", "", regmatches(rawtxt, gregexpr("\\{.*?\\}", rawtxt))[[1]])
+jhsph.faculty <- as.data.frame(splittxt %>% strsplit("\\\"") %>% sapply(., "[", c(4, 10, 26, 14)) %>% t())
+names(jhsph.faculty) <- c("Department", "Site", "Position", "Name")
+jhsph.faculty$Firstname <- sapply(strsplit(jhsph.faculty$Name,", "), "[[", 2)
+jhsph.faculty$Lastname <- sapply(strsplit(jhsph.faculty$Name,", "), "[[", 1)
+
+##remove non-faculty
+jhsph.faculty <- jhsph.faculty %>% filter(grepl("Professor|Scientist", Position))
+jhsph.faculty <- jhsph.faculty %>% mutate(Tenure_track = ifelse(grepl("Professor", Position), "Yes", "No"))
+
+## Get URL for each faculty member
+jhsph.faculty <- jhsph.faculty %>% mutate(URL = paste0("https://www.jhsph.edu/faculty/directory/profile/", Site))
+
+jhsph.faculty$coursename <- NA
+
+
+# for (i in seq_along(urls) ){
+# url <- urls[i]
+# #change the url in scrape.js 
+# lines <- readLines("scrape.js")
+# lines[1] <- paste0("var url ='", url ,"';")
+# writeLines(lines, "scrape.js")
+# ## Download website
+# system("./phantomjs-2.1.1-macosx/bin/phantomjs scrape.js")
+# pg <- read_html("1.html")
+# links <- pg %>% html_nodes("#tblFaculty h3 a") %>% html_attr("href")
+# names <- pg %>% html_nodes("#tblFaculty h3 a") %>% html_attr("title") %>% trimws()
+# #department <- rep(dep[i],length(links))
+# facultylinks <- paste0("https://www.jhsph.edu",links)
+
+## get course information
+for (j in 1:nrow(jhsph.faculty)){
+      tryCatch({
+  facsession <- html_session(jhsph.faculty$URL[j])
+  courselink <- facsession %>% html_node("#scivalLink+ p a") %>% html_attr("href")
+  if(!is.na(courselink)){
+  courselink <- paste0("https://www.jhsph.edu",courselink)
+  coursesession <- html_session(courselink)
+  # coursename for the school year of 2017-2018
+  coursename <- coursesession %>% html_nodes(".Course_Link") %>% html_text() %>% trimws()
+  if(!is.na(coursename)){
+  coursename <- paste0(coursename, seq=", ",collapse = "") 
+  coursename <- substr(coursename,1,nchar(coursename)-2)
+  }
+  jhsph.faculty$coursename[j] <- coursename
+  }
+      }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) #end tryCatch
+    Sys.sleep(1)
+  }
+# Sys.sleep(1)
+# }
+
+
+write.csv(jhsph.faculty, "jhsph.faculty1.csv",row.names = F)
+
+### select useful columns
+jhsph_courseinfo <- read.csv("~/Desktop/advdatasience_term2/webscraping_class/jhsph.faculty1.csv")
+jhsph_courseinfo <- jhsph_courseinfo %>% select(Department, Position, Name, Firstname, Lastname, coursename ) #1109 obs
+temp <- jhsph_courseinfo[complete.cases(jhsph_courseinfo),] #465 obs with course information
+write.csv(jhsph_courseinfo, "./data/jhsph_courseinfo.csv",row.names = F )
+
+```
