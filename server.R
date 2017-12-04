@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(fedreporter)
+library(stringr)
 # Elizabeth Colantuoni
 load("citation.RData")
 course = read.csv("jhsph_courseinfo.csv")
@@ -11,7 +12,7 @@ function(input, output) {
     f = isolate(input$first)
     l = isolate(input$last)
     out = paste("Name:", f, l)
-    out
+    print(out)
   })
   
   output$department = renderText({
@@ -19,7 +20,15 @@ function(input, output) {
     f = isolate(input$first)
     l = isolate(input$last)
     out = paste("Affiliation: ", as.character(course[which(course$Firstname == f & course$Lastname == l), 1]))
-    out
+    print(out)
+  })
+  
+  output$title = renderText({
+    input$goButton
+    f = isolate(input$first)
+    l = isolate(input$last)
+    out = paste("Position: ", as.character(course[which(course$Firstname == f & course$Lastname == l), 2]))
+    print(out)
   })
   
   output$class = renderUI({
@@ -27,7 +36,6 @@ function(input, output) {
     f = isolate(input$first)
     l = isolate(input$last)
     allc = as.character(course[which(course$Firstname == f & course$Lastname == l), 6])
-    library(stringr)
     allc = str_split(allc, pattern = fixed(", "), simplify = T)
     out = ""
     for (i in 1:length(allc)){
@@ -42,7 +50,7 @@ function(input, output) {
     l = isolate(input$last)
     name = str_split(names(citation), pattern = fixed(" "), simplify = T)
     t = citation[[which(name[,1] == f & name[,2] == l)]][,c(1,3)]
-    t
+    print(t)
   })
   
   output$citeplot = renderPlot({
@@ -77,15 +85,9 @@ function(input, output) {
     l = isolate(input$last)
     name = str_split(names(citation), pattern = fixed(" "), simplify = T)
     t = citation[[which(name[,1] == f & name[,2] == l)]][,c(1,3)]
-    t
+    print(t)
   })
-    
-  
-  
-  
-  
-  
-  
+
   output$grant = renderTable({
     # install.packages("remotes")
     # remotes::install_github("muschellij2/fedreporter")

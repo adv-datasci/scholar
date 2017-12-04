@@ -16,7 +16,7 @@ shinyUI(
   
       mainPanel(
         tabsetPanel(type="tabs",
-                    tabPanel("Information", br(), textOutput("name"), textOutput("department"), plotOutput("citeplot"), plotOutput("pubbar"), tags$head(tags$style("#name{color: black;font-size: 30px;}")), tags$head(tags$style("#department{color: black;font-size: 20px;}"))),
+                    tabPanel("Information", br(), textOutput("name"), textOutput("department"), textOutput("title"), plotOutput("citeplot"), plotOutput("pubbar"), tags$head(tags$style("#name{color: black;font-size: 30px;}")), tags$head(tags$style("#department{color: black;font-size: 20px;}")), tags$head(tags$style("#title{color: black;font-size: 20px;}"))),
                     # font-style: italic;
                     tabPanel("Publication Detail", tableOutput("publication")),
                     tabPanel("Class", htmlOutput("class"), tags$head(tags$style("#class{color: black;font-size: 20px;}"))),
