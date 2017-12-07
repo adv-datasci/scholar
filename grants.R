@@ -32,6 +32,12 @@ dat <- map(
   .x = pi_list,
   .f = ~ try(fe_projects_search(pi_name = .x)$content$items))
 
+library(readr)
+readr::write_rds(x = pi_list,path = "pi_list.rds", compress = "none")
+readr::write_rds(x = all_firsts, path = "first_name_list.rds", compress = "none")
+readr::write_rds(x = all_lasts, path = "last_name_list.rds", compress = "none")
+readr::write_rds(x = dat, path = "grants_nested_list.rds", compress = "none")
+
 # get_scholar_df = function(firstname, lastname){
 # res = fe_projects_search(pi_name = paste0(lastname,", ",firstname))
 #> GET command is:
