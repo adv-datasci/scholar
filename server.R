@@ -72,8 +72,8 @@ function(input, output) {
     fullname = isolate(input$fullname)
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
-    f = splitname[1]
-    l = splitname[2]
+    l = splitname[1]
+    f = splitname[2]
     name = str_split(names(citation), pattern = fixed(" "), simplify = T)
     t = citation[[which(name[,1] == f & name[,2] == l)]][,c(1,3)]
     print(t)
@@ -84,8 +84,8 @@ function(input, output) {
     fullname = isolate(input$fullname)
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
-    f = splitname[1]
-    l = splitname[2]
+    l = splitname[1]
+    f = splitname[2]
     name = str_split(names(citation), pattern = fixed(" "), simplify = T)
     t = citation[[which(name[,1] == f & name[,2] == l)]][,9:18]
     citey = colSums(t)
@@ -100,8 +100,8 @@ function(input, output) {
     fullname = isolate(input$fullname)
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
-    f = splitname[1]
-    l = splitname[2]
+    l = splitname[1]
+    f = splitname[2]
     name = str_split(names(citation), pattern = fixed(" "), simplify = T)
     t = citation[[which(name[,1] == f & name[,2] == l)]][,3]
     t = t[!is.na(t)]
@@ -116,8 +116,8 @@ function(input, output) {
     fullname = isolate(input$fullname)
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
-    f = splitname[1]
-    l = splitname[2]
+    l = splitname[1]
+    f = splitname[2]
     name = str_split(names(citation), pattern = fixed(" "), simplify = T)
     t = citation[[which(name[,1] == f & name[,2] == l)]][,c(1,3)]
     print(t)
@@ -126,15 +126,18 @@ function(input, output) {
   output$grant = renderTable({
     input$goButton
     fullname = isolate(input$fullname)
-    splitname = str_split(string = fullname, 
-                          pattern = ", ")[[1]]
-    f = splitname[1]
-    l = splitname[2]
-    contactPi_name_keep <- grepl(pattern = paste0("^",l,f),
-                                 x = grant_df,
+    # splitname = str_split(string = fullname, 
+    #                       pattern = ", ")[[1]]
+    # l = splitname[1]
+    # f = splitname[2]
+    # contactPi_name_keep <- grepl(pattern = paste0("^",l,", ",f),
+    #                              x = grant_df$contactPi,
+    #                              ignore.case = TRUE)
+    contactPi_keep <- grepl(pattern = paste0("^",fullname),
+                                 x = grant_df$contactPi,
                                  ignore.case = TRUE)
-    match_row <- which(course$Lastname == last_name_list[index])
-    print.data.frame(grant_df[grant_df$contactPi==])
+    contactPi_df <- grant_df[contactPi_keep]
+    print.data.frame(contactPi_df)
   })
 }
   

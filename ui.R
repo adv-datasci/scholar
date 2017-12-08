@@ -35,7 +35,7 @@ shinyUI(
                     tabPanel("Course(s)", htmlOutput("class"), 
                              tags$head(tags$style("#class{color: black;font-size: 20px;}"))),
                     tabPanel("Grant(s)", 
-                             renderTable("grant"))
+                             tableOutput("grant"))
         )
       )
     )
