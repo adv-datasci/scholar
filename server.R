@@ -1,18 +1,19 @@
 library(shiny)
+library(magrittr)
+library(purrr)
 library(ggplot2)
 library(fedreporter)
 library(stringr)
+
 # Elizabeth Colantuoni
 setwd("~/github/scholar/")
 load("citation.RData")
-grant_nested_list<-read_rds("grant_nested_list.rds")
+grant_df<-read_rds("grant_df.rds")
 course = read.csv("jhsph_courseinfo.csv")
 name_list<-read_rds("name_list.rds")
 first_name_list <- read_rds("first_name_list.rds")
 last_name_list <- read_rds("last_name_list.rds")
-# con_pis = sapply(grant_nested_list, "[[", "contactPi")
-# keep = grepl(as.character(paste0("^",l)), con_pis)[1]
-# affiliation = [keep]
+
 function(input, output) {
   output$name = renderText({
     input$goButton
@@ -123,25 +124,17 @@ function(input, output) {
   })
 
   output$grant = renderTable({
-    # install.packages("remotes")
-    # remotes::install_github("muschellij2/fedreporter")
     input$goButton
-    last_name = isolate(input$last)
-    first_name = isolate(input$first)
-    scholar_search = function(firstname, lastname){
-      res = fe_projects_search(pi_name = paste0(lastname,", ",firstname))
-      items = res$content$items
-      con_pis = sapply(items, "[[", "contactPi")
-      keep = grepl(paste0("^",lastname), con_pis)
-      items = items[keep]
-      get_list = function(x) {sapply(items, "[[", x)}
-      item_names=names(items[[1]])
-      df = data.frame(lapply(item_names[1:12],get_list))
-      names(df)=item_names[1:12]
-      return(df$fy)
-    }
-    a = scholar_search(firstname = first_name,lastname = last_name)
-    print.data.frame(a)
+    fullname = isolate(input$fullname)
+    splitname = str_split(string = fullname, 
+                          pattern = ", ")[[1]]
+    f = splitname[1]
+    l = splitname[2]
+    contactPi_name_keep <- grepl(pattern = paste0("^",l,f),
+                                 x = grant_df,
+                                 ignore.case = TRUE)
+    match_row <- which(course$Lastname == last_name_list[index])
+    print.data.frame(grant_df[grant_df$contactPi==])
   })
 }
   
