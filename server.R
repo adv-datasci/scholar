@@ -13,6 +13,7 @@ course = read.csv("jhsph_courseinfo.csv")
 name_list<-read_rds("name_list.rds")
 first_name_list <- read_rds("first_name_list.rds")
 last_name_list <- read_rds("last_name_list.rds")
+grants_df <- readRDS("grant_df.rds")
 
 function(input, output) {
   output$name = renderText({
@@ -136,7 +137,7 @@ function(input, output) {
     contactPi_keep <- grepl(pattern = paste0("^",fullname),
                                  x = grant_df$contactPi,
                                  ignore.case = TRUE)
-    contactPi_df <- grant_df[contactPi_keep]
+    contactPi_df <- grant_df[contactPi_keep,]
     print.data.frame(contactPi_df)
   })
 }
