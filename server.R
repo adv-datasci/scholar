@@ -1,10 +1,13 @@
 library(shiny)
 library(magrittr)
 library(purrr)
+library(plotly)
+#install.packages("plotly")
+library(lubridate)
 library(ggplot2)
 library(fedreporter)
 library(stringr)
-
+library(readr)
 # Elizabeth Colantuoni
 setwd("~/github/scholar/")
 load("citation.RData")
@@ -13,8 +16,8 @@ course = read.csv("jhsph_courseinfo.csv")
 name_list<-read_rds("name_list.rds")
 first_name_list <- read_rds("first_name_list.rds")
 last_name_list <- read_rds("last_name_list.rds")
-grants_df <- readRDS("grant_df.rds")
-
+# grant_df <- readRDS("grant_df.rds")
+object.size(grant_df)
 function(input, output) {
   output$name = renderText({
     input$goButton
@@ -124,7 +127,7 @@ function(input, output) {
     print(t)
   })
 
-  output$grant = renderTable({
+  output$grant_tbl = renderTable({
     input$goButton
     fullname = isolate(input$fullname)
     # splitname = str_split(string = fullname, 
@@ -137,9 +140,80 @@ function(input, output) {
     contactPi_keep <- grepl(pattern = paste0("^",fullname),
                                  x = grant_df$contactPi,
                                  ignore.case = TRUE)
-    contactPi_df <- grant_df[contactPi_keep,]
+    contactPi_df <- grant_df[contactPi_keep,] %>% 
+        dplyr::select(projectNumber,
+                      fy,
+                      title,
+                      totalCostAmount) 
+    
     print.data.frame(contactPi_df)
   })
+  
+  # FIRST REACTIVE PLOT
+    ## Reactive plot: Grant funding pie chart
+  output$grant_pie <- renderPlotly({
+    input$goButton
+    fullname = isolate(input$fullname)
+    contactPi_keep <- grepl(pattern = paste0("^",fullname),
+                            x = grant_df$contactPi,
+                            ignore.case = TRUE)
+    contactPi_df <- grant_df[contactPi_keep,]
+    contactPi_sum <- contactPi_df %>% dplyr::group_by(title) %>%
+        summarise(sum = sum(totalCostAmount), n = n())
+    #cost_df<-contactPi_df[which(contactPi_df$totalCostAmount > input$gThresh),]
+    # fullname <- "ABRAHAM, ALISON G"
+    plot_ly(contactPi_sum, 
+            labels = ~title, 
+            values = ~sum, 
+            type = 'pie') %>%
+      layout(title = 'Funding',
+             xaxis = list(showgrid = FALSE, 
+                          zeroline = FALSE, 
+                          showticklabels = FALSE),
+             yaxis = list(showgrid = FALSE, 
+                          zeroline = FALSE, 
+                          showticklabels = FALSE)
+      )
+  }) 
+  
+  # SECOND REACTIVE PLOT
+  ## Reactive plot: Credit bar chart
+  output$grant_dot <- renderPlotly({
+     input$goButton
+    fullname = isolate(input$fullname)
+    contactPi_keep <- grepl(pattern = paste0("^",fullname),
+                            x = grant_df$contactPi,
+                            ignore.case = TRUE)
+    
+    contactPi_df <- grant_df[contactPi_keep,]
+    
+    plot_ly(contactPi_df, 
+            y = ~totalCostAmount,
+            x = ~fy,
+            type = 'scatter', 
+            name = 'Funding Proportions', 
+            color = ~title,
+            mode = 'markers',
+            symbol = I(1),
+            marker = list(size = 10,
+                          fill = "none",
+                       line = list(color = ~title,
+                                   width = 2))) %>% 
+      layout(title = "Funding Timeline", 
+             showlegend = FALSE,
+             yaxis = list(title = 'Dollars', 
+                          tickcolor = toRGB("blue")),
+             xaxis = list(title = 'Fiscal Year', 
+                          autotick = FALSE, 
+                          ticks = "outside", 
+                          tick0 = 0, 
+                          dtick = 1, 
+                          ticklen = 5, 
+                          tickwidth = 2, 
+                          tickcolor = toRGB("blue")))
+  })
+
+  
 }
   
 
