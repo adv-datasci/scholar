@@ -1,4 +1,3 @@
-# setwd("/Users/gege/Dropbox/graduate/DataScience/shiny")
 # install.packages("here")
 # install.packages("shinydashboard")
 library(here)
@@ -19,6 +18,7 @@ body <- dashboardBody(
         font-family: "Georgia", Times, "Times New Roman", serif;
         font-weight: bold;
         font-size: 24px;
+        text-align: center;
       }
     '))),
     fluidRow(
@@ -52,8 +52,7 @@ body <- dashboardBody(
     tabItems(
         # First tab content
         tabItem(tabName = "info",
-                p(strong("Quick Start Guide"), 
-                  align = "center"),
+                p("Quick Start Guide"), 
                 fluidRow(
                     tags$div(align = "center",
                     box(title = list(strong('Step 1 -'),
@@ -77,31 +76,29 @@ body <- dashboardBody(
                                      shiny::icon("minus")),
                         width = 4)
                     )),
-                p(strong("Acknowledgements"), 
-                  align = "center"),
-                fluidRow(
-                box(title = list(strong('Contributors'), 
-                                 shiny::icon("thumbs-o-up")),
-"We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages we used during the creation of the project below.",
-                    width = 12)),
-                p(strong("Author Information"), 
-                  align = "center"),
+                p("Contributions"), 
                 fluidRow(
                     box(title = list(strong('Authors'), 
                                      shiny::icon("smile-o")),
                 "The authors of the 'Scholar' shiny app are Gege Gui, Yue Cao, Shulin Qing, and Martin Skarzynski.",
-                width = 12)),
-                p(strong("Software"), 
-                  align = "center"),
+                width = 12),
+                box(title = list(strong('Contributors'), 
+                                 shiny::icon("thumbs-o-up")),
+"We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project below.",
+                    width = 12)),
+                p("Software"), 
                 fluidRow(
                     box(title = list(strong('Packages'), 
                                      shiny::icon("dropbox")),
                 "The used in the making of the 'Scholar' shiny app are readr (Hadley Wickham), shiny (Joe Cheng) ...",
-                width = 12))
+                width = 12),
+                box(title = list(strong('Code Snippets'), 
+                                 shiny::icon("code")),
+                    "The used in the making of the 'Scholar' shiny app are readr (Hadley Wickham), shiny (Joe Cheng) ...",
+                    width = 12))
                 ),
         tabItem(tabName = "grants",
-            p(strong("Grant Data"), 
-              align = "center"),
+            p("Grant Data"), 
             fluidRow(
                 box(title = list("Funding Timeline", 
                                     shiny::icon("line-chart")),
@@ -127,8 +124,7 @@ body <- dashboardBody(
                     tableOutput("grant_tbl")))),
         # Second tab content
         tabItem(tabName = "citations",
-                p(strong("Citation Data"), 
-                  align = "center"),
+                p("Citation Data"), 
                 fluidRow(
                     box(title = list("Citation Timeline", 
                                      shiny::icon("line-chart")),
