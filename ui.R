@@ -7,7 +7,7 @@ library(readr)
 grant_df<-read_rds("grant_df.rds")
 course_df <- read_rds("course_df.rds")
 
-name_list <- toupper(grant_df$contactPi)
+name_list <- course_df$Name
 shinyUI(
   navbarPage(
     titlePanel("Scholar"),

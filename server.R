@@ -11,21 +11,16 @@ library(readr)
 # Elizabeth Colantuoni
 setwd("~/github/scholar/")
 load("citation.RData")
-grant_df <- read_rds("grant_df.rds")
+
+grant_df<-read_rds("grant_df.rds")
 course_df <- read_rds("course_df.rds")
-name_list<-grant_df$contactPi
-first_name_list <- read_rds("first_name_list.rds")
-last_name_list <- read_rds("last_name_list.rds")
+
+name_list <- course_df$Name
 
 function(input, output) {
   output$name = renderText({
     input$goButton
     fullname = isolate(input$fullname)
-    # splitname = str_split(string = fullname, 
-    #                       pattern = ", ")[[1]]
-    # f = splitname[1]
-    # l = splitname[2]
-    # out = paste0("Name: ", f,", ", l)
     out = paste0("Name: ", fullname)
     print(out)
   })
@@ -42,8 +37,7 @@ function(input, output) {
     input$goButton
     fullname = isolate(input$fullname)
     index = which(name_list==fullname)[1]
-    match_row <- which(course$Lastname == last_name_list[index])
-    out = paste0("Department: ", as.character(course[match_row, 1]))
+    out = paste0("Department: ", as.character(course_df[index, 1]))
     print(out)
   })
   
@@ -51,8 +45,7 @@ function(input, output) {
     input$goButton
     fullname = isolate(input$fullname)
     index = which(name_list==fullname)[1]
-    match_row <- which(course$Lastname == last_name_list[index])
-    out = paste0("Position: ", as.character(course[match_row, 2]))
+    out = paste0("Position: ", as.character(course_df[index, 2]))
     print(out)
   })
   
@@ -60,8 +53,7 @@ function(input, output) {
     input$goButton
     fullname = isolate(input$fullname)
     index = which(name_list==fullname)[1]
-    match_row <- which(course$Lastname == last_name_list[index])
-    allc = as.character(course[match_row, 6])
+    allc = as.character(course_df[index, 6])
     allc = str_split(allc, pattern = fixed(", "), simplify = T)
     out = ""
     for (i in 1:length(allc)){
@@ -69,7 +61,7 @@ function(input, output) {
     }
     HTML(out)
   })
-  
+# need citations data to fix this part  
   output$publication = renderTable({
     input$goButton
     fullname = isolate(input$fullname)
@@ -81,7 +73,7 @@ function(input, output) {
     t = citation[[which(name[,1] == f & name[,2] == l)]][,c(1,3)]
     print(t)
   })
-  
+# need citations data to fix this part  
   output$citeplot = renderPlot({
     input$goButton
     fullname = isolate(input$fullname)
@@ -97,7 +89,7 @@ function(input, output) {
     p = ggplot(data = cy, aes(x, y, group = 1)) + geom_point() + geom_line()
     p + labs(x = "Year", y = "Total Citation", title = "Total Publication Citation")
   })
-  
+# need citations data to fix this part  
   output$pubbar = renderPlot({
     input$goButton
     fullname = isolate(input$fullname)
@@ -113,7 +105,7 @@ function(input, output) {
     g = ggplot(yr, aes(Year))
     g + geom_bar() + labs(x = "Year", y = "Total Publication", title = "Total Publication Every Year")
   })
-  
+# need citations data to fix this part  
   output$publication = renderTable({
     input$goButton
     fullname = isolate(input$fullname)
@@ -129,17 +121,16 @@ function(input, output) {
   output$grant_tbl = renderTable({
     input$goButton
     fullname = isolate(input$fullname)
-    # splitname = str_split(string = fullname, 
-    #                       pattern = ", ")[[1]]
-    # l = splitname[1]
-    # f = splitname[2]
-    # contactPi_name_keep <- grepl(pattern = paste0("^",l,", ",f),
-    #                              x = grant_df$contactPi,
-    #                              ignore.case = TRUE)
-    contactPi_keep <- grepl(pattern = paste0("^",fullname),
+    splitname = str_split(string = fullname,
+                          pattern = ", ")[[1]] %>%
+        toupper()
+    l = splitname[1]
+    f = str_split(string = splitname[2],
+                  pattern = " ")[[1]][1]
+    contactPi_keep <- grepl(pattern = paste0("^",l,", ",f),
                                  x = grant_df$contactPi,
                                  ignore.case = TRUE)
-    contactPi_df <- grant_df[contactPi_keep,] %>% 
+    contactPi_df <- grant_df[contactPi_keep,] %>%
         dplyr::select(projectNumber,
                       fy,
                       title,
@@ -153,14 +144,18 @@ function(input, output) {
   output$grant_pie <- renderPlotly({
     input$goButton
     fullname = isolate(input$fullname)
-    contactPi_keep <- grepl(pattern = paste0("^",fullname),
-                            x = grant_df$contactPi,
-                            ignore.case = TRUE)
+    splitname = str_split(string = fullname,
+                          pattern = ", ")[[1]] %>%
+                    toupper()
+    l = splitname[1]
+    f = str_split(string = splitname[2],
+                  pattern = " ")[[1]][1]
+    contactPi_keep <- grepl(pattern = paste0("^",l,", ",f),
+                                 x = grant_df$contactPi,
+                                 ignore.case = TRUE)
     contactPi_df <- grant_df[contactPi_keep,]
     contactPi_sum <- contactPi_df %>% dplyr::group_by(title) %>%
         summarise(sum = sum(totalCostAmount), n = n())
-    #cost_df<-contactPi_df[which(contactPi_df$totalCostAmount > input$gThresh),]
-    # fullname <- "ABRAHAM, ALISON G"
     plot_ly(contactPi_sum, 
             labels = ~title, 
             values = ~sum, 
@@ -180,10 +175,15 @@ function(input, output) {
   output$grant_dot <- renderPlotly({
      input$goButton
     fullname = isolate(input$fullname)
-    contactPi_keep <- grepl(pattern = paste0("^",fullname),
-                            x = grant_df$contactPi,
-                            ignore.case = TRUE)
-    
+    splitname = str_split(string = fullname,
+                          pattern = ", ")[[1]] %>%
+        toupper()
+    l = splitname[1]
+    f = str_split(string = splitname[2],
+                  pattern = " ")[[1]][1]
+    contactPi_keep <- grepl(pattern = paste0("^",l,", ",f),
+                                 x = grant_df$contactPi,
+                                 ignore.case = TRUE)
     contactPi_df <- grant_df[contactPi_keep,]
     
     plot_ly(contactPi_df, 
@@ -214,9 +214,3 @@ function(input, output) {
   
 }
   
-
-  
-
-# name
-# affiliation + citationplot + yearpublication (title click get paper)
-# + year + barplot 

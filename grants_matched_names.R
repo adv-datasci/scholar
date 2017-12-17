@@ -59,22 +59,14 @@ lasts <- map_chr(final_name_list, `[[`, 2)
 # test which2keep function
 # any(which2keep(grant_df$contactPi, lasts[1], firsts[1]))
 
-lastname_match <- map_chr(str_split(grant_df$contactPi, ", "),`[[`, 1) %in% toupper(lasts)
+lastname_match <- map_chr(str_split(grant_df$contactPi, ", "),`[[`, 1) %in% toupper(course_df$Lastname)
 
-firstname_match <-  map_chr(str_split(grant_df$contactPi, " "),`[[`, 2) %in% toupper(firsts)
+firstname_match <-  map_chr(str_split(grant_df$contactPi, " "),`[[`, 2) %in% toupper(map_chr(str_split(course_df$Firstname, " "),`[[`, 1))
 
 bothname_match <- lastname_match == TRUE & firstname_match == TRUE
 
-scholar_df <- grant_df[bothname_match,]
+grant_df <- grant_df[bothname_match,]
 
-scholar_df$contactPi <- gsub(pattern = "\\.", replacement = "", x = scholar_df$contactPi)
+length(unique(grant_df$contactPi))
 
-length(unique(scholar_df$contactPi))
-unique(scholar_df$contactPi)
-lastname_missing <- !(toupper(lasts) %in%
-unique(map_chr(str_split(scholar_df$contactPi, ", "),`[[`, 1))
-)
-missing_lastnames <- lasts[lastname_missing]
-missing_lastnames
-
-readr::write_rds(x = scholar_df, path = "scholar_df.rds", compress = "none")
+readr::write_rds(x = scholar_df, path = "grant_df.rds", compress = "none")
