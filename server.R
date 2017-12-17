@@ -3,17 +3,14 @@ library(magrittr)
 library(purrr)
 library(plotly)
 #install.packages("plotly")
-library(lubridate)
+library(here)
 library(ggplot2)
-library(fedreporter)
 library(stringr)
 library(readr)
 # Elizabeth Colantuoni
-setwd("~/github/scholar/")
-load("citation.RData")
 
-grant_df<-read_rds("grant_df.rds")
-course_df <- read_rds("course_df.rds")
+grant_df<-read_rds(here("data/grant_df.rds"))
+course_df <- read_rds(here("data/course_df.rds"))
 
 name_list <- course_df$Name
 

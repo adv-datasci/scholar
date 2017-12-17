@@ -1,11 +1,13 @@
 # setwd("/Users/gege/Dropbox/graduate/DataScience/shiny")
-setwd("~/github/scholar/")
+# install.packages("here")
+library(here)
 library(shiny)
 library(ggplot2)
 library(plotly)
 library(readr)
-grant_df<-read_rds("grant_df.rds")
-course_df <- read_rds("course_df.rds")
+
+grant_df<-read_rds(here("data/grant_df.rds"))
+course_df <- read_rds(here("data/course_df.rds"))
 
 name_list <- course_df$Name
 shinyUI(
