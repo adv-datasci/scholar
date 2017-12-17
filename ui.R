@@ -36,33 +36,38 @@ body <- dashboardBody(
             solidHeader = TRUE,
             collapsible = TRUE, 
             htmlOutput("class"))),
-    h3("Grant Data", align = "center"),
-    fluidRow(
-        box(title = 'Funding Timeline',
-        width = 8,
-        solidHeader = TRUE,
-        collapsible = TRUE, 
-        plotlyOutput("grant_dot")),
-        box(title = 'Funding Proportions',
-            width = 4,
-            solidHeader = TRUE,
-            collapsible = TRUE, 
-            plotlyOutput("grant_pie"))), 
-    fluidRow(
-        box(title = 'Funding Table',
-            width = 12,
-            solidHeader = TRUE,
-            collapsible = TRUE, 
-            tableOutput("grant_tbl"))),
-    h3("Citation Data", align = "center"),
-    hr())
+    tabItems(
+        # First tab content
+        tabItem(tabName = "grants",
+            h3("Grant Data", align = "center"),
+            fluidRow(
+                box(title = 'Funding Timeline',
+                width = 8,
+                solidHeader = TRUE,
+                collapsible = TRUE, 
+                plotlyOutput("grant_dot")),
+                box(title = 'Funding Proportions',
+                    width = 4,
+                    solidHeader = TRUE,
+                    collapsible = TRUE, 
+                    plotlyOutput("grant_pie"))), 
+            fluidRow(
+                box(title = 'Funding Table',
+                    width = 12,
+                    solidHeader = TRUE,
+                    collapsible = TRUE, 
+                    tableOutput("grant_tbl")))),
+        # Second tab content
+        tabItem(tabName = "citations",
+                h3("Citation Data", align = "center"),
+                hr())))
 
 dashboardPage(
     dashboardHeader(title = "Scholar"),
     dashboardSidebar(
         sidebarMenu(
-            menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-            menuItem("Widgets", tabName = "widgets", icon = icon("th"))
+            menuItem("Grants", tabName = "grants", icon = icon("dashboard")),
+            menuItem("Citations", tabName = "citations", icon = icon("th"))
     )),
     body
 )
