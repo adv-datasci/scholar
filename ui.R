@@ -18,8 +18,7 @@ fluidPage(
         tabPanel("Researcher Menu",
                  selectInput("fullname", 
                              label="Scholar (Last Name, First Name)",
-                             choices=name_list,selected=1)),
-        actionButton("goButton", "Go!")),
+                             choices=name_list,selected=1))),
       mainPanel(
         tabsetPanel(type="tabs",
                     tabPanel("Information", 

@@ -6,7 +6,6 @@ output: html_document
 
 Scraping course information from JHSPH
 ```{r}
- setwd("~/Desktop/advdatasience_term2/webscraping_class")
 library(rvest)
 library(stringr)
 library(dplyr)

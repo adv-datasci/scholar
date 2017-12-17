@@ -16,39 +16,34 @@ name_list <- course_df$Name
 
 function(input, output) {
   output$name = renderText({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     out = paste0("Name: ", fullname)
     print(out)
   })
   
   output$index = renderText({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     index = which(name_list==fullname)[1]
     out = paste0("Index: ", index)
     print(out)
   })
     
   output$department = renderText({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     index = which(name_list==fullname)[1]
     out = paste0("Department: ", as.character(course_df[index, 1]))
     print(out)
   })
   
   output$title = renderText({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     index = which(name_list==fullname)[1]
     out = paste0("Position: ", as.character(course_df[index, 2]))
     print(out)
   })
   
   output$class = renderUI({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     index = which(name_list==fullname)[1]
     allc = as.character(course_df[index, 6])
     allc = str_split(allc, pattern = fixed(", "), simplify = T)
@@ -60,8 +55,7 @@ function(input, output) {
   })
 # need citations data to fix this part  
   output$publication = renderTable({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
     l = splitname[1]
@@ -72,8 +66,7 @@ function(input, output) {
   })
 # need citations data to fix this part  
   output$citeplot = renderPlot({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
     l = splitname[1]
@@ -88,8 +81,7 @@ function(input, output) {
   })
 # need citations data to fix this part  
   output$pubbar = renderPlot({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
     l = splitname[1]
@@ -104,8 +96,7 @@ function(input, output) {
   })
 # need citations data to fix this part  
   output$publication = renderTable({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname, 
                           pattern = ", ")[[1]]
     l = splitname[1]
@@ -116,8 +107,7 @@ function(input, output) {
   })
 
   output$grant_tbl = renderTable({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname,
                           pattern = ", ")[[1]] %>%
         toupper()
@@ -139,8 +129,7 @@ function(input, output) {
   # FIRST REACTIVE PLOT
     ## Reactive plot: Grant funding pie chart
   output$grant_pie <- renderPlotly({
-    input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname,
                           pattern = ", ")[[1]] %>%
                     toupper()
@@ -170,8 +159,7 @@ function(input, output) {
   # SECOND REACTIVE PLOT
   ## Reactive plot: Credit bar chart
   output$grant_dot <- renderPlotly({
-     input$goButton
-    fullname = isolate(input$fullname)
+    fullname = input$fullname
     splitname = str_split(string = fullname,
                           pattern = ", ")[[1]] %>%
         toupper()
