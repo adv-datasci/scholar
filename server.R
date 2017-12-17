@@ -11,13 +11,12 @@ library(readr)
 # Elizabeth Colantuoni
 setwd("~/github/scholar/")
 load("citation.RData")
-grant_df<-read_rds("grant_df.rds")
-course = read.csv("jhsph_courseinfo.csv")
-name_list<-read_rds("name_list.rds")
+grant_df <- read_rds("grant_df.rds")
+course_df <- read_rds("course_df.rds")
+name_list<-grant_df$contactPi
 first_name_list <- read_rds("first_name_list.rds")
 last_name_list <- read_rds("last_name_list.rds")
-# grant_df <- readRDS("grant_df.rds")
-object.size(grant_df)
+
 function(input, output) {
   output$name = renderText({
     input$goButton
@@ -166,7 +165,7 @@ function(input, output) {
             labels = ~title, 
             values = ~sum, 
             type = 'pie') %>%
-      layout(title = 'Funding',
+      layout(title = 'Funding Proportions',
              xaxis = list(showgrid = FALSE, 
                           zeroline = FALSE, 
                           showticklabels = FALSE),
@@ -191,7 +190,6 @@ function(input, output) {
             y = ~totalCostAmount,
             x = ~fy,
             type = 'scatter', 
-            name = 'Funding Proportions', 
             color = ~title,
             mode = 'markers',
             symbol = I(1),

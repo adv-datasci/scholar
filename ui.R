@@ -2,9 +2,12 @@
 setwd("~/github/scholar/")
 library(shiny)
 library(ggplot2)
-# library(plotly)
+library(plotly)
 library(readr)
-name_list<-read_rds("name_list.rds")
+grant_df<-read_rds("grant_df.rds")
+course_df <- read_rds("course_df.rds")
+
+name_list <- toupper(grant_df$contactPi)
 shinyUI(
   navbarPage(
     titlePanel("Scholar"),

@@ -4,38 +4,22 @@ library(fedreporter)
 
 
 setwd("~/github/scholar/")
-load("./Desktop/Advanced data Science/scholar/citation.RData")
 
-courseInfo<-read.csv("jhsph_courseinfo.csv")
+library(readr)
+name_list <- read_csv('names.csv')
+library(stringr)
+name_list  <- str_split(string = name_list$Name, pattern = " ")
 
-#create lists of names from original citation and courseInfo files
-first_name_list <- courseInfo$Firstname
-last_name_list <- as.character(courseInfo$Lastname)
-more_names <- names(citation)
-more_names_list <- strsplit(more_names," ")
-#more_firsts <- lapply(X = more_names_list,FUN = "[[", 1)
-#more_lasts <- lapply(X = more_names_list,FUN = "[[", 2)
-
-more_firsts <- map_chr(more_names_list, `[[`, 1)
-more_lasts <- map_chr(more_names_list, `[[`, 2)
-
-first_name_list <- gsub("\\s+.+","",first_name_list)
-
-all_firsts <- c(first_name_list,more_firsts)
-all_lasts <- c(last_name_list,more_lasts)
+firsts <- map_chr(name_list, `[[`, 1)
+lasts <- map_chr(name_list, `[[`, 2)
 
 #create combined list of names
-name_list <- paste0(all_lasts, ", ", all_firsts)
+pi_list <- paste0(lasts, ", ", firsts)
 
-head(pi_list)
-
-#scraping original grants data
-dat <- map(
+#scraping grants data
+grant_nested_list <- map(
     .x = pi_list,
     .f = ~ try(fe_projects_search(pi_name = .x)$content$items))
-
-#rename scraped data
-grant_nested_list <- dat
 
 # create dataframe from nested list
 grant_flat <- grant_nested_list %>% flatten()
@@ -51,12 +35,8 @@ grant_df <- map(grant_flat, nullToNA) %>% rbindlist()
 
 # write out the scraped data as rds file
 library(readr)
-readr::write_rds(x = name_list,path = "name_list.rds", compress = "none")
-readr::write_rds(x = all_firsts, path = "first_name_list.rds", compress = "none")
-readr::write_rds(x = all_lasts, path = "last_name_list.rds", compress = "none")
-readr::write_rds(x = grant_nested_list, path = "grant_nested_list.rds", compress = "none")
 readr::write_rds(x = grant_df, path = "grant_df.rds", compress = "none")
-
+object.size(grant_df)
 
 # trim grant df based on names.csv
 setwd("~/github/scholar/")
