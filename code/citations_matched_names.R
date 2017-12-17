@@ -15,36 +15,35 @@ library(purrr)
 cite_firsts <- map_chr(name_list, `[[`, 1)
 cite_lasts <- map_chr(name_list, `[[`, 2)
 
-#create combined list of names
-pi_list <- paste0(lasts, ", ", firsts)
 
 # Remove periods
 course$Firstname <- gsub(pattern = "\\.", replacement = "", x = course$Firstname)
-
 # Separate middle initials
 course_firstname <- str_split(string = course$Firstname, pattern = " ")
 # Keep only first names (not middle initials)
 course_firsts <- map_chr(course_firstname, `[[`, 1)
 # obtain last names from course df
 course_lasts <- course$Lastname
+
 # obtain last names from grant df
 grant_lasts <- str_to_title(map_chr(str_split(grant_df$contactPi, ", "),`[[`, 1))
-# add last names to grant df as new column
-grant_df[,"Lastname"] <- grant_lasts
-
+# obtain first names from grant df
 grant_firsts <- str_to_title(map_chr(str_split(grant_df$contactPi, " "),`[[`, 2))
 
-# flatten nested list
-cite_flat <- l %>% flatten()
+# replace last names to course df as new column
+course[,"Lastname"] <- course_lasts
+# replace first names to course df as new column
+course[,"Firstname"] <- course_firsts
+# add full names to course df as new column
+course[,"Fullname"] <- paste0(course_lasts, ", ", course_firsts)
 
-# now newst
+# add last names to grant df as new column
+grant_df[,"Lastname"] <- grant_lasts
+# add first names to grant df as new column
+grant_df[,"Firstname"] <- grant_firsts
+# add full names to grant df as new column
+grant_df[,"Fullname"] <- paste0(grant_lasts, ", ", grant_firsts)
 
-test <- l[["Alison Abraham"]]
-
-test <- l[[paste(course_firsts[2],course_lasts[2], sep = " ")]]
-
-library(data.table)
-cite_df <- cite_flat %>% rbindlist()
 
 
 lastname_match <- map_chr(str_split(grant_df$contactPi, ", "),`[[`, 1) %in% toupper(course_df$Lastname)
