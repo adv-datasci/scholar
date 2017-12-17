@@ -47,10 +47,10 @@ function(input, output) {
         index = which(name_list==fullname)[1]
         allc = as.character(course_df[index, 6])
         allc = str_split(allc, pattern = fixed(", "), simplify = T)
-    out <- str_c(allc, collapse = '<br/>')
-    HTML(out)
-  })
-# need citations data to fix this part  
+        out <- str_c(allc, collapse = '<br/>')
+        HTML(out)
+    })
+    # need citations data to fix this part  
   output$publication = renderTable({
     fullname = input$fullname
     splitname = str_split(string = fullname, 
@@ -143,8 +143,7 @@ function(input, output) {
             labels = ~title, 
             values = ~sum, 
             type = 'pie') %>%
-      layout(title = 'Funding Proportions',
-             xaxis = list(showgrid = FALSE, 
+      layout(xaxis = list(showgrid = FALSE, 
                           zeroline = FALSE, 
                           showticklabels = FALSE),
              yaxis = list(showgrid = FALSE, 
@@ -179,8 +178,7 @@ function(input, output) {
                           fill = "none",
                        line = list(color = ~title,
                                    width = 2))) %>% 
-      layout(title = "Funding Timeline", 
-             showlegend = FALSE,
+      layout(showlegend = FALSE,
              yaxis = list(title = 'Dollars', 
                           tickcolor = toRGB("blue")),
              xaxis = list(title = 'Fiscal Year', 
