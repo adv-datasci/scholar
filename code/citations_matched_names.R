@@ -92,3 +92,4 @@ cite_df_keep <- names(l) %in% cite_first_last
 
 cite_df_list <- l[cite_df_keep]
 
+readr::write_rds(x = cite_df_list, path = "cite_df_list_matched.rds", compress = "none")
