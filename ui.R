@@ -10,8 +10,7 @@ grant_df<-read_rds(here("data/grant_df.rds"))
 course_df <- read_rds(here("data/course_df.rds"))
 
 name_list <- course_df$Name
-shinyUI(
-  navbarPage(
+fluidPage(    
     titlePanel("Scholar"),
     sidebarLayout(
       sidebarPanel(
@@ -47,4 +46,3 @@ shinyUI(
       )
     )
   )
-)
