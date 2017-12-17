@@ -1,13 +1,10 @@
 #install.packages("remotes")
 #remotes::install_github("muschellij2/fedreporter")
 library(fedreporter)
-
-
-setwd("~/github/scholar/")
-
 library(readr)
-name_list <- read_csv('names.csv')
 library(stringr)
+
+name_list <- read_csv(here("data/names.csv"))
 name_list  <- str_split(string = name_list$Name, pattern = " ")
 
 firsts <- map_chr(name_list, `[[`, 1)
@@ -38,12 +35,10 @@ library(readr)
 readr::write_rds(x = grant_df, path = "grant_df.rds", compress = "none")
 object.size(grant_df)
 
-# trim grant df based on names.csv
-setwd("~/github/scholar/")
 
 library(readr)
-grant_df<-read_rds("grant_df.rds")
-final_name_list <- read_csv('names.csv')
+grant_df<-read_rds(here("data/grant_df.rds"))
+name_list <- read_csv(here("data/names.csv"))
 library(stringr)
 final_name_list  <- str_split(string = final_name_list$Name, pattern = " ")
 
