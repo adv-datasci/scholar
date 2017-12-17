@@ -15,42 +15,39 @@ course_df <- read_rds(here("data/course_df.rds"))
 name_list <- course_df$Name
 
 function(input, output) {
-  output$name = renderText({
-    fullname = input$fullname
-    out = paste0("Name: ", fullname)
-    print(out)
-  })
-  
-  output$index = renderText({
-    fullname = input$fullname
-    index = which(name_list==fullname)[1]
-    out = paste0("Index: ", index)
-    print(out)
-  })
+    output$name = renderText({
+        fullname = input$fullname
+        out = paste0("Name: ", fullname)
+        print(out)
+    })
     
-  output$department = renderText({
-    fullname = input$fullname
-    index = which(name_list==fullname)[1]
-    out = paste0("Department: ", as.character(course_df[index, 1]))
-    print(out)
-  })
-  
-  output$title = renderText({
-    fullname = input$fullname
-    index = which(name_list==fullname)[1]
-    out = paste0("Position: ", as.character(course_df[index, 2]))
-    print(out)
-  })
-  
-  output$class = renderUI({
-    fullname = input$fullname
-    index = which(name_list==fullname)[1]
-    allc = as.character(course_df[index, 6])
-    allc = str_split(allc, pattern = fixed(", "), simplify = T)
-    out = ""
-    for (i in 1:length(allc)){
-      out = paste(out, allc[i], sep = '<br/>')
-    }
+    output$index = renderText({
+        fullname = input$fullname
+        index = which(name_list==fullname)[1]
+        out = paste0("Index: ", index)
+        print(out)
+    })
+    
+    output$department = renderText({
+        fullname = input$fullname
+        index = which(name_list==fullname)[1]
+        out = paste0("Department: ", as.character(course_df[index, 1]))
+        print(out)
+    })
+    
+    output$title = renderText({
+        fullname = input$fullname
+        index = which(name_list==fullname)[1]
+        out = paste0("Position: ", as.character(course_df[index, 2]))
+        print(out)
+    })
+    
+    output$class = renderUI({
+        fullname = input$fullname
+        index = which(name_list==fullname)[1]
+        allc = as.character(course_df[index, 6])
+        allc = str_split(allc, pattern = fixed(", "), simplify = T)
+    out <- str_c(allc, collapse = '<br/>')
     HTML(out)
   })
 # need citations data to fix this part  

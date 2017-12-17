@@ -10,38 +10,27 @@ grant_df<-read_rds(here("data/grant_df.rds"))
 course_df <- read_rds(here("data/course_df.rds"))
 
 name_list <- course_df$Name
-fluidPage(    
+fluidPage(
     titlePanel("Scholar"),
-    sidebarLayout(
-      sidebarPanel(
-        # sliderInput("year", "Year", 1967, 2017, 100),
-        tabPanel("Researcher Menu",
-                 selectInput("fullname", 
-                             label="Scholar (Last Name, First Name)",
-                             choices=name_list,selected=1))),
-      mainPanel(
-        tabsetPanel(type="tabs",
-                    tabPanel("Information", 
-                             br(), 
-                             textOutput("name"),
-                             textOutput("index"),
-                             textOutput("department"), 
-                             textOutput("title"), 
-                             #plotOutput("citeplot"), 
-                             #plotOutput("pubbar"), 
-                             tags$head(tags$style("#name{color: black;font-size: 30px;}")), 
-                             tags$head(tags$style("#department{color: black;font-size: 20px;}")), 
-                             tags$head(tags$style("#title{color: black;font-size: 20px;}"))),
-                    # font-style: italic;
-                    tabPanel("Publication(s)", 
-                             tableOutput("publication")),
-                    tabPanel("Course(s)", htmlOutput("class"), 
-                             tags$head(tags$style("#class{color: black;font-size: 20px;}"))),
-                    tabPanel("Grant(s)", 
-                             br(),  plotlyOutput("grant_dot"),
-                             br(), plotlyOutput("grant_pie"),
-                             br(), tableOutput("grant_tbl"))
-        )
-      )
-    )
-  )
+    fluidRow(
+        column(3,
+               h4("Last and First Name"),
+               selectInput("fullname", 
+                           label=NULL,
+                           choices=name_list,selected=2)
+                           ),
+        column(3, 
+               h4("Scholar Information"),
+               textOutput("department"), 
+               textOutput("title")
+               ),
+        column(6,
+               h4("Courses Taught"),
+           htmlOutput("class"))),
+    h3("Grant Data"),
+    fluidRow(
+        column(8,
+               plotlyOutput("grant_dot")),
+        column(4,    
+               plotlyOutput("grant_pie"))), 
+    tableOutput("grant_tbl"))
