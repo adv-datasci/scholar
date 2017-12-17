@@ -44,16 +44,51 @@ grant_df[,"Firstname"] <- grant_firsts
 # add full names to grant df as new column
 grant_df[,"Fullname"] <- paste0(grant_lasts, ", ", grant_firsts)
 
+course_fulls <- paste0(course_lasts, ", ", course_firsts)
+grant_fulls <- paste0(grant_lasts, ", ", grant_firsts)
+cite_fulls <- paste0(cite_lasts, ", ", cite_firsts)
 
+# keep only name matches
+grant_fullname_match <- grant_fulls %in% cite_fulls
+course_fullname_match <- course_fulls %in% cite_fulls
 
-lastname_match <- map_chr(str_split(grant_df$contactPi, ", "),`[[`, 1) %in% toupper(course_df$Lastname)
+# grant_lastname_match <- grant_lasts %in% cite_lasts
+# 
+# grant_firstname_match <-  grant_firsts %in% cite_firsts
+# 
+# grant_bothname_match <- grant_lastname_match == TRUE & grant_firstname_match == TRUE
+# 
+# 
+# course_lastname_match <- course_lasts %in% cite_lasts
+# 
+# course_firstname_match <-  course_firsts %in% cite_firsts
+# 
+# course_bothname_match <- course_lastname_match == TRUE & course_firstname_match == TRUE
+# 
+# course_df_match <- course[course_bothname_match,]
 
-firstname_match <-  map_chr(str_split(grant_df$contactPi, " "),`[[`, 2) %in% toupper(map_chr(str_split(course_df$Firstname, " "),`[[`, 1))
+grant_df_match <- grant_df[grant_fullname_match,]
 
-bothname_match <- lastname_match == TRUE & firstname_match == TRUE
+course_df_match <- course[course_fullname_match,]
 
-grant_df <- grant_df[bothname_match,]
+readr::write_rds(x = grant_df_match, path = "grant_df_matched.rds", compress = "none")
 
-length(unique(grant_df$contactPi))
+readr::write_rds(x = course_df_match, path = "course_df_matched.rds", compress = "none")
 
-readr::write_rds(x = scholar_df, path = "grant_df.rds", compress = "none")
+cite_names <- data_frame(Lastname=cite_lasts,
+                         Firstname=cite_firsts,
+                         Fullname=paste0(cite_lasts, ", ", cite_firsts))
+
+cite_name_match1 <- cite_names$Fullname %in% grant_df_match$Fullname 
+cite_name_match2 <- cite_names$Fullname %in% course_df_match$Fullname
+
+cite_bothname_match <- cite_name_match1 == TRUE & cite_name_match2 == TRUE
+
+cite_names_match <- cite_names[cite_bothname_match,]
+
+cite_first_last <- paste(cite_names_match$Firstname, cite_names_match$Lastname, sep = " ")
+
+cite_df_keep <- names(l) %in% cite_first_last
+
+cite_df_list <- l[cite_df_keep]
+

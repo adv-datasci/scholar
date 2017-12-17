@@ -11,7 +11,7 @@ firsts <- map_chr(name_list, `[[`, 1)
 lasts <- map_chr(name_list, `[[`, 2)
 
 #create combined list of names
-pi_list <- paste0(lasts, ", ", firsts)
+pi_list <- paste0(cite_lasts, ", ", cite_firsts)
 
 #scraping grants data
 grant_nested_list <- map(
