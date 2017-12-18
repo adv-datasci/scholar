@@ -87,10 +87,12 @@ cite_bothname_match <- cite_name_match1 == TRUE & cite_name_match2 == TRUE
 cite_names_match <- cite_names[cite_bothname_match,]
 
 cite_first_last <- paste(cite_names_match$Firstname, cite_names_match$Lastname, sep = " ")
-
 cite_df_keep <- names(l) %in% cite_first_last
 
 cite_df_list <- l[cite_df_keep]
+
+cite_last_first <- paste(cite_names_match$Lastname, cite_names_match$Firstname, sep = ", ")  
+names(cite_df_list) <- cite_last_first
 
 readr::write_rds(x = cite_df_list, path = "cite_df_list_matched.rds", compress = "none")
 

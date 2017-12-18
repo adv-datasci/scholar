@@ -3,6 +3,9 @@ library(magrittr)
 library(purrr)
 library(plotly)
 #install.packages("plotly")
+# install.packages("kableExtra")
+library(kableExtra)
+
 library(here)
 library(ggplot2)
 library(stringr)
@@ -52,15 +55,21 @@ function(input, output) {
         HTML(out)
     })
     # need citations data to fix this part  
-    output$publication = renderTable({
+    output$pub_tbl = renderUI({
         fullname = input$fullname
-        splitname = str_split(string = fullname, 
-                              pattern = ", ")[[1]]
-        l = splitname[1]
-        f = splitname[2]
-        name = str_split(names(citation), pattern = fixed(" "), simplify = T)
-        t = citation[[which(name[,1] == f & name[,2] == l)]][,c(1,3)]
-        print(t)
+        cite_df_list[[fullname]] %>% 
+            dplyr::select(title,
+                          # authors,
+                          # publication.date,
+                          # total.citations,
+                          journal
+                          ) %>% 
+            kable(format = "html") %>%
+        kable_styling(bootstrap_options = c("striped", 
+                                            "hover", 
+                                            "condensed", 
+                                            "responsive")) %>% 
+            HTML()
     })
     # need citations data to fix this part  
     output$citeplot = renderPlot({
@@ -104,14 +113,19 @@ function(input, output) {
         print(t)
     })
     
-    output$grant_tbl = renderTable({
+    output$grant_tbl = renderUI({
         grant_df %>%
             dplyr::filter(Fullname == input$fullname) %>% 
             dplyr::select(projectNumber,
                           fy,
                           title,
                           totalCostAmount) %>% 
-            print.data.frame()
+            kable(format = "html") %>%
+        kable_styling(bootstrap_options = c("striped", 
+                                            "hover", 
+                                            "condensed", 
+                                            "responsive")) %>% 
+            HTML()
     })
     
     # FIRST REACTIVE PLOT

@@ -114,7 +114,7 @@ body <- dashboardBody(
                         width = 12,
                         solidHeader = TRUE,
                         collapsible = TRUE,
-                        tableOutput("grant_tbl")))),
+                        htmlOutput("grant_tbl")))),
         # Second tab content
         tabItem(tabName = "citations",
                 p("Citation Data"), 
@@ -126,7 +126,7 @@ body <- dashboardBody(
                         collapsible = TRUE 
                         # ,
                         # plotlyOutput("grant_dot")
-                        ),
+                    ),
                     box(title = list('Citations by Journal', 
                                      shiny::icon("pie-chart")),
                         width = 5,
@@ -134,19 +134,18 @@ body <- dashboardBody(
                         collapsible = TRUE
                         # ,
                         # plotlyOutput("grant_pie")
-                        )), 
+                    )), 
                 fluidRow(
                     box(title = list('Citation Table', 
                                      shiny::icon("table")),
                         width = 12,
                         solidHeader = TRUE,
-                        collapsible = TRUE
-                        # ,
-                        # tableOutput("grant_tbl")
-                        ))
-                )
+                        collapsible = TRUE,
+                        htmlOutput("pub_tbl")
+                    ))
         )
     )
+)
 
 dashboardPage(
     dashboardHeader(title = "Scholar",
