@@ -119,14 +119,14 @@ body <- dashboardBody(
         tabItem(tabName = "citations",
                 p("Citation Data"), 
                 fluidRow(
-                    box(title = list("Citation by Year", 
+                    box(title = list("Citations by Year", 
                                      shiny::icon("line-chart")),
                         width = 7,
                         solidHeader = TRUE,
                         collapsible = TRUE,
                         plotlyOutput("cite_dot")
                     ),
-                    box(title = list('Citations by Journal', 
+                    box(title = list('Citations by Article', 
                                      shiny::icon("pie-chart")),
                         width = 5,
                         solidHeader = TRUE,
