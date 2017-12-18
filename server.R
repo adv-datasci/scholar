@@ -9,7 +9,7 @@ library(stringr)
 library(readr)
 # Elizabeth Colantuoni
 
-course_df <- read_rds(here("data/course_grant_df.rds"))
+course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 
 cite_df_list <- read_rds(here("data/cite_df_list_matched.rds"))
 
@@ -32,14 +32,14 @@ function(input, output) {
     output$department = renderText({
         fullname = input$fullname
         index = which(name_list==fullname)[1]
-        out = paste0("Department: ", as.character(course_df[index, 1]))
+        out = paste0("Department: ", as.character(course_grant_df[index, "Department"]))
         print(out)
     })
     
     output$title = renderText({
         fullname = input$fullname
         index = which(name_list==fullname)[1]
-        out = paste0("Position: ", as.character(course_df[index, 2]))
+        out = paste0("Position: ", as.character(course_grant_df[index, "Position"]))
         print(out)
     })
     
@@ -105,23 +105,19 @@ function(input, output) {
     })
     
     output$grant_tbl = renderTable({
-        fullname = input$fullname
-        contactPi_df <- grant_df %>%
-            dplyr::filter(grant_df$Fullname == input$fullname) %>% 
+        grant_df %>%
+            dplyr::filter(Fullname == input$fullname) %>% 
             dplyr::select(projectNumber,
                           fy,
                           title,
-                          totalCostAmount) 
-        
-        print.data.frame(contactPi_df)
+                          totalCostAmount) %>% 
+            print.data.frame()
     })
     
     # FIRST REACTIVE PLOT
     ## Reactive plot: Grant funding pie chart
     output$grant_pie <- renderPlotly({
-        fullname = input$fullname
-        
-        contactPi_sum <- grant_df %>% 
+        contactPi_sum <- course_grant_df %>% 
             dplyr::filter(Fullname == input$fullname) %>% 
             dplyr::group_by(title) %>%
             summarise(sum = sum(totalCostAmount), n = n())
@@ -141,8 +137,8 @@ function(input, output) {
     # SECOND REACTIVE PLOT
     ## Reactive plot: Grant scatter plot
     output$grant_dot <- renderPlotly({
-        grant_df %>% 
-        dplyr::filter(grant_df$Fullname == input$fullname) %>% 
+        course_grant_df %>% 
+        dplyr::filter(Fullname == input$fullname) %>% 
         plot_ly(
                 y = ~totalCostAmount,
                 x = ~fy,

@@ -7,9 +7,9 @@ library(plotly)
 library(readr)
 library(shinydashboard)
 
-course_df <- read_rds(here("data/course_grant_df.rds"))
+course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 
-name_list <- course_df$Fullname
+name_list <- course_grant_df$Fullname
 
 body <- dashboardBody(
     tags$p(tags$style(HTML('
@@ -24,7 +24,6 @@ body <- dashboardBody(
         box(title = list("Name (Last, First)",
                          shiny::icon("users")),
             width = 3,
-            height = 100,
             solidHeader = TRUE,
             collapsible = TRUE, 
             selectInput("fullname", 
@@ -35,7 +34,6 @@ body <- dashboardBody(
         box(title = list("Scholar Info",
                          shiny::icon("id-card")),
             width = 3,
-            height = "auto",
             solidHeader = TRUE,
             collapsible = TRUE, 
             textOutput("department"), 
@@ -44,7 +42,6 @@ body <- dashboardBody(
         box(title = list("Courses Taught", 
                          shiny::icon("graduation-cap")),
             width = 6,
-            height = "auto",
             solidHeader = TRUE,
             collapsible = TRUE, 
             htmlOutput("class"))),
@@ -104,14 +101,12 @@ body <- dashboardBody(
                         width = 7,
                         solidHeader = TRUE,
                         collapsible = TRUE, 
-                        height = 460,
                         plotlyOutput("grant_dot")),
                     box(title = list('Funding Proportions', 
                                      shiny::icon("pie-chart")),
                         width = 5,
                         solidHeader = TRUE,
                         collapsible = TRUE,
-                        height = 460,
                         plotlyOutput("grant_pie"))), 
                 fluidRow(
                     box(title = list('Funding Table', 
@@ -119,7 +114,6 @@ body <- dashboardBody(
                         width = 12,
                         solidHeader = TRUE,
                         collapsible = TRUE,
-                        height = "auto",
                         tableOutput("grant_tbl")))),
         # Second tab content
         tabItem(tabName = "citations",
@@ -129,8 +123,7 @@ body <- dashboardBody(
                                      shiny::icon("line-chart")),
                         width = 7,
                         solidHeader = TRUE,
-                        collapsible = TRUE, 
-                        height = 460
+                        collapsible = TRUE 
                         # ,
                         # plotlyOutput("grant_dot")
                         ),
@@ -138,8 +131,7 @@ body <- dashboardBody(
                                      shiny::icon("pie-chart")),
                         width = 5,
                         solidHeader = TRUE,
-                        collapsible = TRUE,
-                        height = 460
+                        collapsible = TRUE
                         # ,
                         # plotlyOutput("grant_pie")
                         )), 
@@ -148,8 +140,7 @@ body <- dashboardBody(
                                      shiny::icon("table")),
                         width = 12,
                         solidHeader = TRUE,
-                        collapsible = TRUE,
-                        height = "auto"
+                        collapsible = TRUE
                         # ,
                         # tableOutput("grant_tbl")
                         ))
