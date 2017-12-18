@@ -10,7 +10,6 @@ library(here)
 library(ggplot2)
 library(stringr)
 library(readr)
-# Elizabeth Colantuoni
 
 course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 
@@ -98,7 +97,7 @@ function(input, output) {
             )
     })    
     output$grant_tbl = renderUI({
-        grant_df %>%
+        course_grant_df %>%
             dplyr::filter(Fullname == input$fullname) %>% 
             dplyr::select(projectNumber,
                           fy,
