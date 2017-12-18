@@ -10,6 +10,7 @@ library(shinydashboard)
 course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 
 name_list <- course_grant_df$Fullname
+department_list = course_grant_df$Department
 
 body <- dashboardBody(
     tags$p(tags$style(HTML('
@@ -21,25 +22,31 @@ body <- dashboardBody(
       }
     '))),
     fluidRow(
-        box(title = list("Name (Last, First)",
+        box(title = list("Select Scholar",
                          shiny::icon("users")),
             width = 3,
             solidHeader = TRUE,
             collapsible = TRUE, 
+            selectInput("departmentname", 
+                        label = "Department", 
+                        choices = department_list, 
+                        selected = 1), 
             selectInput("fullname", 
-                        label = NULL, 
+                        label = "Name (Last, First)",
                         choices=name_list,
                         selected=2)
         ),
-        box(title = list("Scholar Info",
+        box(title = list("Scholar Stats",
                          shiny::icon("id-card")),
             width = 3,
             solidHeader = TRUE,
             collapsible = TRUE, 
-            textOutput("department"), 
-            textOutput("title")
+            textOutput("total_grant_count"), 
+            textOutput("total_grant_amount"),
+            textOutput("total_cites"), 
+            textOutput("total_pubs") 
         ),
-        box(title = list("Courses Taught", 
+        box(title = list("Courses Taught in 2017", 
                          shiny::icon("graduation-cap")),
             width = 6,
             solidHeader = TRUE,
@@ -56,8 +63,11 @@ body <- dashboardBody(
                                               icon("info-circle"),
                                               ', Grants',
                                               shiny::icon("usd"), 
-                                              ', or Citations',
-                                              shiny::icon("quote-right")),
+                                              ', Citations',
+                                              shiny::icon("quote-right"),
+                                              ', or GitHub (link to code & data)',
+                                              shiny::icon("github")
+                                              ),
                                  width = 12),
                              box(title = list(strong('Step 2 -'), 
                                               'Collapse Sidebar', 

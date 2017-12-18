@@ -16,35 +16,42 @@ course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 cite_df_list <- read_rds(here("data/cite_df_list_matched.rds"))
 
 name_list <- course_grant_df$Fullname
+department_list <- course_grant_df$Department
 
-function(input, output) {
-    output$name = renderText({
+function(input, output, session) {
+    
+    observe({
+        de = input$departmentname
+        newname_list = course_grant_df[which(course_grant_df$Department == de), "Fullname"]
+        updateSelectInput(session, "fullname", choices = newname_list, label="Name (Last, First)")
+    })
+    
+    output$total_grant_count = renderText({
         fullname = input$fullname
-        out = paste0("Name: ", fullname)
+        out = paste0("Total Grants: ", fullname)
         print(out)
     })
     
-    output$index = renderText({
-        fullname = input$fullname
-        index = which(name_list==fullname)[1]
-        out = paste0("Index: ", index)
-        print(out)
-    })
     
-    output$department = renderText({
-        fullname = input$fullname
-        index = which(name_list==fullname)[1]
-        out = paste0("Department: ", as.character(course_grant_df[index, "Department"]))
-        print(out)
-    })
-    
-    output$title = renderText({
+    output$total_grant_amount = renderText({
         fullname = input$fullname
         index = which(name_list==fullname)[1]
-        out = paste0("Position: ", as.character(course_grant_df[index, "Position"]))
+        out = paste0("Total Grant Funding: ", as.character(course_grant_df[index, "Position"]))
         print(out)
     })
     
+    output$total_cites = renderText({
+        fullname = input$fullname
+        index = which(name_list==fullname)[1]
+        out = paste0("Total Citations: ", index)
+        print(out)
+    })
+    
+    output$total_pubs = renderText({
+        depart = input$departmentname
+        out = paste0("Total Publications: ", depart)
+        print(out)
+    })
     output$class = renderUI({
         fullname = input$fullname
         index = which(name_list==fullname)[1]
@@ -72,7 +79,8 @@ function(input, output) {
     output$cite_dot = renderPlotly({
         fullname = input$fullname
         df <- cite_df_list[[fullname]]
-        citey <- df[,12:ncol(df)-1]
+        citey <- df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
+        # years <- grep(pattern = "X?\\d{4}", x = names(df), ignore.case = TRUE, value = TRUE)
         cy <- data.frame(names(citey), colSums(citey,na.rm = TRUE))
         colnames(cy) = c("x", "y")
         p <- ggplot(data = cy, aes(x, y, group = 1)) + geom_point() + geom_line() + labs(x = "Year", y = "Total Citations")
