@@ -138,8 +138,8 @@ function(input, output) {
     ## Reactive plot: Grant scatter plot
     output$grant_dot <- renderPlotly({
         course_grant_df %>% 
-        dplyr::filter(Fullname == input$fullname) %>% 
-        plot_ly(
+            dplyr::filter(Fullname == input$fullname) %>% 
+            plot_ly(
                 y = ~totalCostAmount,
                 x = ~fy,
                 type = 'scatter', 
@@ -147,15 +147,15 @@ function(input, output) {
                 mode = 'markers',
                 symbol = I(1),
                 marker = list(size = 10,
-                          fill = "none",
-                       line = list(color = ~title,
-                                   width = 2))) %>% 
-      layout(showlegend = FALSE,
-             yaxis = list(title = 'Dollars', 
-                          tickcolor = toRGB("blue")),
-             xaxis = list(title = 'Fiscal Year', 
-                          autotick = FALSE, 
-                          ticks = "outside", 
+                              fill = "none",
+                              line = list(color = ~title,
+                                          width = 2))) %>% 
+            layout(showlegend = FALSE,
+                   yaxis = list(title = 'Dollars', 
+                                tickcolor = toRGB("blue")),
+                   xaxis = list(title = 'Fiscal Year', 
+                                autotick = FALSE, 
+                                ticks = "outside", 
                           tick0 = 0, 
                           dtick = 1, 
                           ticklen = 5, 

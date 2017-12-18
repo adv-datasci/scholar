@@ -155,7 +155,8 @@ dashboardPage(
         sidebarMenu(
             menuItem("App Info", tabName = "info", icon = icon("info-circle")),
             menuItem("Grants", tabName = "grants", icon = icon("usd")),
-            menuItem("Citations", tabName = "citations", icon = icon("quote-right"))
+            menuItem("Citations", tabName = "citations", icon = icon("quote-right")),
+            menuItem("GitHub", href = "https://github.com/adv-datasci/scholar/", icon = icon("github"))
     )),
     body
 )
