@@ -93,3 +93,13 @@ cite_df_keep <- names(l) %in% cite_first_last
 cite_df_list <- l[cite_df_keep]
 
 readr::write_rds(x = cite_df_list, path = "cite_df_list_matched.rds", compress = "none")
+
+left <- left_join(grant_df,course_df, by = c("Fullname","Firstname","Lastname"))
+right <- right_join(grant_df,course_df, by = "Fullname")
+full <- full_join(grant_df,course_df, by = "Fullname")
+which(is.na(full$title)==TRUE)
+which(is.na(right$title)==TRUE)
+which(is.na(left$title)==TRUE)
+
+readr::write_rds(x = left, path = "course_grant_df.rds", compress = "none")
+

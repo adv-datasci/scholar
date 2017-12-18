@@ -11,7 +11,7 @@ firsts <- map_chr(name_list, `[[`, 1)
 lasts <- map_chr(name_list, `[[`, 2)
 
 #create combined list of names
-pi_list <- paste0(cite_lasts, ", ", cite_firsts)
+pi_list <- paste0(lasts, ", ",firsts)
 
 #scraping grants data
 grant_nested_list <- map(
@@ -64,4 +64,5 @@ grant_df <- grant_df[bothname_match,]
 
 length(unique(grant_df$contactPi))
 
-readr::write_rds(x = scholar_df, path = "grant_df.rds", compress = "none")
+readr::write_rds(x = grant_df, path = "grant_df.rds", compress = "none")
+

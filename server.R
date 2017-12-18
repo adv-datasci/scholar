@@ -9,10 +9,11 @@ library(stringr)
 library(readr)
 # Elizabeth Colantuoni
 
-grant_df<-read_rds(here("data/grant_df.rds"))
-course_df <- read_rds(here("data/course_df.rds"))
+course_df <- read_rds(here("data/course_grant_df.rds"))
 
-name_list <- course_df$Name
+cite_df_list <- read_rds(here("data/cite_df_list_matched.rds"))
+
+name_list <- course_df$Fullname
 
 function(input, output) {
     output$name = renderText({
@@ -105,16 +106,8 @@ function(input, output) {
     
     output$grant_tbl = renderTable({
         fullname = input$fullname
-        splitname = str_split(string = fullname,
-                              pattern = ", ")[[1]] %>%
-            toupper()
-        l = splitname[1]
-        f = str_split(string = splitname[2],
-                      pattern = " ")[[1]][1]
-        contactPi_keep <- grepl(pattern = paste0("^",l,", ",f),
-                                x = grant_df$contactPi,
-                                ignore.case = TRUE)
-        contactPi_df <- grant_df[contactPi_keep,] %>%
+        contactPi_df <- grant_df %>%
+            dplyr::filter(grant_df$Fullname == input$fullname) %>% 
             dplyr::select(projectNumber,
                           fy,
                           title,
@@ -127,17 +120,10 @@ function(input, output) {
     ## Reactive plot: Grant funding pie chart
     output$grant_pie <- renderPlotly({
         fullname = input$fullname
-        splitname = str_split(string = fullname,
-                              pattern = ", ")[[1]] %>%
-            toupper()
-        l = splitname[1]
-        f = str_split(string = splitname[2],
-                      pattern = " ")[[1]][1]
-        contactPi_keep <- grepl(pattern = paste0("^",l,", ",f),
-                                x = grant_df$contactPi,
-                                ignore.case = TRUE)
-        contactPi_df <- grant_df[contactPi_keep,]
-        contactPi_sum <- contactPi_df %>% dplyr::group_by(title) %>%
+        
+        contactPi_sum <- grant_df %>% 
+            dplyr::filter(Fullname == input$fullname) %>% 
+            dplyr::group_by(title) %>%
             summarise(sum = sum(totalCostAmount), n = n())
         plot_ly(contactPi_sum, 
                 labels = ~title, 
@@ -153,21 +139,11 @@ function(input, output) {
     }) 
     
     # SECOND REACTIVE PLOT
-    ## Reactive plot: Credit bar chart
+    ## Reactive plot: Grant scatter plot
     output$grant_dot <- renderPlotly({
-        fullname = input$fullname
-        splitname = str_split(string = fullname,
-                              pattern = ", ")[[1]] %>%
-            toupper()
-        l = splitname[1]
-        f = str_split(string = splitname[2],
-                      pattern = " ")[[1]][1]
-        contactPi_keep <- grepl(pattern = paste0("^",l,", ",f),
-                                x = grant_df$contactPi,
-                                ignore.case = TRUE)
-        contactPi_df <- grant_df[contactPi_keep,]
-        
-        plot_ly(contactPi_df, 
+        grant_df %>% 
+        dplyr::filter(grant_df$Fullname == input$fullname) %>% 
+        plot_ly(
                 y = ~totalCostAmount,
                 x = ~fy,
                 type = 'scatter', 
