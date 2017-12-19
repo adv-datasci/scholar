@@ -109,16 +109,29 @@ function(input, output, session) {
         #                                         "condensed", 
         #                                         "responsive")) %>% 
         #     HTML()
-        df <- cite_df_list[[fullname]]
-        pcite = df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
+        # df <- cite_df_list[[fullname]]
+        # pcite = df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
+        # pcite = rowSums(pcite)
+        # ind = order(pcite, decreasing = TRUE)
+        # index = which(ind %in% 1:10)
+        # ta = df[index, ]
+        # id = 1:10
+        # out = cbind(id, ta[, colnames(ta) %in% c("title", "publication.date", "total.citations")])
+        # out[,4] = as.integer(out[,4])
+        # colnames(out) = c("ID", "Title", "Publication Date", "Total Citations")
+        t = cite_df_list[[fullname]]
+        pcite = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+        colnames(pcite) = str_split(colnames(pcite), pattern = fixed("X"), simplify = T)[,2]
         pcite = rowSums(pcite)
-        ind = order(pcite, decreasing = TRUE)
-        index = which(ind %in% 1:10)
-        ta = df[index, ]
-        id = 1:10
-        out = cbind(id, ta[, colnames(ta) %in% c("title", "publication.date", "total.citations")])
-        out[,4] = as.integer(out[,4])
-        colnames(out) = c("ID", "Title", "Publication Date", "Total Citations")
+        t = cbind(t, pcite)
+        t = t[order(t$pcite, decreasing = T), ]
+        t = t[1:10, ]
+        if (sum(colnames(t) == "publication.date.1") == 1){
+            t$publication.date = t$publication.date.1
+        }
+        out = t[, colnames(t) %in% c("title", "publication.date", "publisher", "journal", "pcite")]
+        out = cbind(1:10, out)
+        colnames(out) = c("ID", "Title", "Publisher", "Journal", "Publication Date", "Total Citations")
         out %>% 
         kable(format = "html") %>%
             kable_styling(bootstrap_options = c("striped", 
@@ -190,12 +203,23 @@ function(input, output, session) {
     })
     output$cite_pie <- renderPlotly({
         fullname = input$fullname
-        df <- cite_df_list[[fullname]]
-        names(df)[7] <- "total_cites"
-        df %>% 
+        t <- cite_df_list[[fullname]]
+        pcite = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+        colnames(pcite) = str_split(colnames(pcite), pattern = fixed("X"), simplify = T)[,2]
+        pcite = rowSums(pcite)
+        t = cbind(t, pcite)
+        t = t[order(t$pcite, decreasing = T), ]
+        t = t[1:10, ]
+        if (sum(colnames(t) == "publication.date.1") == 1){
+            t$publication.date = t$publication.date.1
+        }
+        out = t[, colnames(t) %in% c("title", "publication.date", "publisher", "journal", "pcite")]
+        out = cbind(1:10, out)
+        # colnames(out) = c("ID", "Title", "Publisher", "Journal", "Publication Date", "Total Citations")
+        out %>% 
         plot_ly(
                 labels = ~title, 
-                values = ~total_cites, 
+                values = ~pcite, 
                 type = 'pie') %>%
             layout(xaxis = list(showgrid = FALSE, 
                                 zeroline = FALSE, 
