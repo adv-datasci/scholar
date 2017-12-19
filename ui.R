@@ -139,7 +139,9 @@ body <- dashboardBody(
                         tabPanel("Citations",
                                  plotlyOutput("cite_dot")
                         ),
-                        tabPanel("Publications", "Tab content 2")
+                        tabPanel("Publications",
+                                 plotlyOutput("pub_dot")
+                                 )
                     ),
 
                     box(title = list('Citations by Article', 
