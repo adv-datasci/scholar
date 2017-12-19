@@ -84,57 +84,60 @@ body <- dashboardBody(
                                               shiny::icon("minus")),
                                  width = 4)
                     )),
-                p("Contributions"), 
                 fluidRow(
-                    box(title = list(strong('Authors'), 
-                                     shiny::icon("smile-o")),
-                        "The authors of the 'Scholar' shiny app are Gege Gui, Yue Cao, Shulin Qing, and Martin Skarzynski.",
-                        collapsible = TRUE,
-                        width = 12),
                     tabBox(
                         # Title can include an icon
                         title = list(strong('App Info'), 
-                                     shiny::icon("tablet")),
+                                     shiny::icon("info-circle")),
                         width = 12,
                         side = "right",
-
-                tabPanel(title = "GitHub Tab", 
+                        selected = 1,
+                tabPanel(title = list(strong("GitHub Tab"), 
+                                      shiny::icon("github")), 
 
                         "The “GitHub” tab in the sidebar directs you to the GitHub page of the Scholar project where it provides all R codes and data files."),
-                    tabPanel(title = "Grants Tab", 
+                    tabPanel(title = list(strong("Grants Tab"), 
+                                          shiny::icon("usd")), 
                        "If you want to explore the scholar’s grants, you can select “Grants” in the sidebar.
                         
                         The “Grant” page provides two plots and one table. The plot on the left displays grant funding in dollars over years and the plot on the right displays the funding proportion of each project. Different colors are used to differentiate the funding projects. The funding table at the bottom of the page displays detailed information (project number, fiscal year, project title and total cost amount in dollars) about the project."
                     ),
 
-                    tabPanel(title = "Citations Tab", 
+                    tabPanel(title = list(strong("Citations Tab"), 
+                                          shiny::icon("quote-right")), 
 
                         "If you want to explore the scholar’s citations, you can select “Citations” in the sidebar. The “Citation” page similarly provides two plots and one table. The plot on the left displays the trend of total citations over years. The plot on the right displays the….. The citation table at the bottom of the page displays the top 10 most cited articles of the scholar."
                     ),
 
-                    tabPanel(title = "Scholar App",
+                    tabPanel(title = list(strong('Scholar App'), 
+                                          shiny::icon("tablet")),
+                             value = 1,
                         "The ‘Scholar’ shiny app helps you get information about citations, NIH/NSF grants and the teaching classes of faculty members at Johns Hopkins School of Public Health. You can first choose a department name and use slider bar to select the scholar you are interested in. After your selection, the information about the position of the scholar and the courses he or she has taught in 2017 would show up."
                         )
                     ),
-                    box(title = list(strong('Data Collection'), 
+                p("Methods"), 
+                tabBox(
+                    # Title can include an icon
+                    title = list(strong('App Info'), 
+                                 shiny::icon("info-circle")),
+                    width = 12,
+                    side = "right",
+                    selected = 1,
+                    tabPanel(title = list(strong('Data Collection'), 
                                      shiny::icon("smile-o")),
                         
                         "
                         Teaching Courses:
                         
-                        The teaching information for the school year of 2017 - 2018 was obtained by scraping web data from the website of JHSPH faculty (https://www.jhsph.edu/faculty/directory/list/)). Through the process of reading HTML source file, removing non-faculty staff, and extracting the HTML “href” attribute, we have accessed to the URL of each faculty member’s teaching information, and then scraped the course lists from these websites.",
-                        width = 12),
+                        The teaching information for the school year of 2017 - 2018 was obtained by scraping web data from the website of JHSPH faculty (https://www.jhsph.edu/faculty/directory/list/)). Through the process of reading HTML source file, removing non-faculty staff, and extracting the HTML “href” attribute, we have accessed to the URL of each faculty member’s teaching information, and then scraped the course lists from these websites."),
                     
-                        box(title = list(strong('Citations'), 
+                        tabPanel(title = list(strong('Citations'), 
                                          shiny::icon("smile-o")),
                             "
-                        The data of citation were acquired from Google Scholar by using John Muschelli’s “gcite” R package. Citation information for faculty members of JHSPH who have Google Scholar profiles is collected. Data are stored in the form of R list of data frames with the citation information of each faculty member stored in a data frame. The data include titles of published articles, authors, publication dates, publisher, journal, total number of citations for each article and citation numbers in each year.",
-                            width = 12),
-                    box(title = list(strong('Contributors'), 
+                        The data of citation were acquired from Google Scholar by using John Muschelli’s “gcite” R package. Citation information for faculty members of JHSPH who have Google Scholar profiles is collected. Data are stored in the form of R list of data frames with the citation information of each faculty member stored in a data frame. The data include titles of published articles, authors, publication dates, publisher, journal, total number of citations for each article and citation numbers in each year."),
+                    tabPanel(title = list(strong('Contributors'), 
                                      shiny::icon("thumbs-o-up")),
-                        "We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project below.",
-                        width = 12)),
-                p("Software"), 
+                        "We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project below."))),
                 fluidRow(
                     box(title = list(strong('Packages'), 
                                      shiny::icon("dropbox")),
