@@ -184,11 +184,11 @@ function(input, output, session) {
         # startdefault = min(cy$x)
         # enddefault = max(cy$x)
         colnames(yr) = c("x", "name", "y")
-        if (nrow(cy) < 7){
+        if (nrow(yr) < 7){
             k = 1
-        } else if (nrow(cy) < 15){
+        } else if (nrow(yr) < 15){
             k = 2
-        }else if (nrow(cy) < 22){
+        }else if (nrow(yr) < 22){
             k = 3
         }else {
             k = 5
