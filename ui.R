@@ -24,7 +24,7 @@ body <- dashboardBody(
     '))),
     fluidRow(
         box(title = list("Select Scholar",
-                         shiny::icon("users")),
+                         shiny::icon("user")),
             width = 3,
             solidHeader = TRUE,
             collapsible = TRUE, 
