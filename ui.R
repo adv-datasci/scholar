@@ -89,19 +89,33 @@ body <- dashboardBody(
                     box(title = list(strong('Authors'), 
                                      shiny::icon("smile-o")),
                         "The authors of the 'Scholar' shiny app are Gege Gui, Yue Cao, Shulin Qing, and Martin Skarzynski.",
+                        collapsible = TRUE,
                         width = 12),
-                    box(title = list(strong('App Info'), 
-                                     shiny::icon("smile-o")),
-                        "The ‘Scholar’ shiny app helps you get information about citations, NIH/NSF grants and the teaching classes of faculty members at Johns Hopkins School of Public Health. You can first choose a department name and use slider bar to select the scholar you are interested in. After your selection, the information about the position of the scholar and the courses he or she has taught in 2017 would show up.
+                    tabBox(
+                        # Title can include an icon
+                        title = list(strong('App Info'), 
+                                     shiny::icon("tablet")),
+                        width = 12,
+                        side = "right",
 
-                        If you want to explore the scholar’s grants, you can select “Grants” in the sidebar.
+                tabPanel(title = "GitHub Tab", 
+
+                        "The “GitHub” tab in the sidebar directs you to the GitHub page of the Scholar project where it provides all R codes and data files."),
+                    tabPanel(title = "Grants Tab", 
+                       "If you want to explore the scholar’s grants, you can select “Grants” in the sidebar.
                         
-                        The “Grant” page provides two plots and one table. The plot on the left displays grant funding in dollars over years and the plot on the right displays the funding proportion of each project. Different colors are used to differentiate the funding projects. The funding table at the bottom of the page displays detailed information (project number, fiscal year, project title and total cost amount in dollars) about the project.
-                        
-                        If you want to explore the scholar’s citations, you can select “Citations” in the sidebar. The “Citation” page similarly provides two plots and one table. The plot on the left displays the trend of total citations over years. The plot on the right displays the….. The citation table at the bottom of the page displays the top 10 most cited articles of the scholar.
-                        
-                        The “GitHub” tab in the sidebar directs you to the GitHub page of the Scholar project where it provides all R codes and data files.",
-                        width = 12),
+                        The “Grant” page provides two plots and one table. The plot on the left displays grant funding in dollars over years and the plot on the right displays the funding proportion of each project. Different colors are used to differentiate the funding projects. The funding table at the bottom of the page displays detailed information (project number, fiscal year, project title and total cost amount in dollars) about the project."
+                    ),
+
+                    tabPanel(title = "Citations Tab", 
+
+                        "If you want to explore the scholar’s citations, you can select “Citations” in the sidebar. The “Citation” page similarly provides two plots and one table. The plot on the left displays the trend of total citations over years. The plot on the right displays the….. The citation table at the bottom of the page displays the top 10 most cited articles of the scholar."
+                    ),
+
+                    tabPanel(title = "Scholar App",
+                        "The ‘Scholar’ shiny app helps you get information about citations, NIH/NSF grants and the teaching classes of faculty members at Johns Hopkins School of Public Health. You can first choose a department name and use slider bar to select the scholar you are interested in. After your selection, the information about the position of the scholar and the courses he or she has taught in 2017 would show up."
+                        )
+                    ),
                     box(title = list(strong('Data Collection'), 
                                      shiny::icon("smile-o")),
                         
@@ -162,6 +176,7 @@ body <- dashboardBody(
                         title = list("Line Charts", 
                                      shiny::icon("line-chart")),
                         width = 7,
+                        side = "right",
                         tabPanel("Citations",
                                  plotlyOutput("cite_dot")
                         ),
@@ -195,8 +210,8 @@ dashboardPage(
     dashboardSidebar(width = 120,
         sidebarMenu(
             menuItem("App Info", tabName = "info", icon = icon("info-circle")),
-            menuItem("Grants", tabName = "grants", icon = icon("usd")),
             menuItem("Citations", tabName = "citations", icon = icon("quote-right")),
+            menuItem("Grants", tabName = "grants", icon = icon("usd")),
             menuItem("GitHub", href = "https://github.com/adv-datasci/scholar/", icon = icon("github"))
     )),
     body
