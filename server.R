@@ -62,18 +62,23 @@ function(input, output, session) {
     })
     output$pub_tbl = renderUI({
         fullname = input$fullname
-        cite_df_list[[fullname]] %>% 
-            dplyr::select(title,
-                          # authors,
-                          # publication.date,
-                          # total.citations,
-                          journal
-                          ) %>% 
-            kable(format = "html") %>%
-        kable_styling(bootstrap_options = c("striped", 
-                                            "hover", 
-                                            "condensed", 
-                                            "responsive")) %>% 
+
+        df <- cite_df_list[[fullname]]
+        pcite = df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
+        pcite = rowSums(pcite)
+        ind = order(pcite, decreasing = TRUE)
+        index = which(ind %in% 1:10)
+        ta = df[index, ]
+        id = 1:10
+        out = cbind(id, ta[, colnames(ta) %in% c("title", "publication.date", "total.citations")])
+        out[,4] = as.integer(out[,4])
+        colnames(out) = c("ID", "Title", "Publication Date", "Total Citations")
+        out %>% 
+        kable(format = "html") %>%
+            kable_styling(bootstrap_options = c("striped", 
+                                                "hover", 
+                                                "condensed", 
+                                                "responsive")) %>% 
             HTML()
     })
     output$cite_dot = renderPlotly({
