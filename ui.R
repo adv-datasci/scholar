@@ -6,6 +6,7 @@ library(ggplot2)
 library(plotly)
 library(readr)
 library(shinydashboard)
+library(markdown)
 
 course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 
@@ -14,8 +15,9 @@ department_list = course_grant_df$Department
 
 body <- dashboardBody(
     # define HTML paragraph (p) tag styling with CSS
-    tags$p(tags$style(HTML('
-    p {
+    tags$h5(tags$style(HTML('
+    h5 {
+        white-space: nowrap,
         font-family: "Georgia", Times, "Times New Roman", serif;
         font-weight: bold;
         font-size: 24px;
@@ -60,7 +62,7 @@ body <- dashboardBody(
         tabItem(
 # reset whitespace in info tab
 tabName = "info",
-p("Quick Start Guide"), 
+h5("Quick Start Guide"), 
 fluidRow(
     tags$div(align = "center",
              box(title = list(strong('Step 1 -'),
@@ -100,28 +102,27 @@ fluidRow(
         
         tabPanel(title = list(strong("GitHub Tab"), 
                       shiny::icon("github")), 
-        "The “GitHub” tab in the sidebar directs you to the GitHub page of the Scholar project where it provides all R codes and data files."),
+                includeMarkdown(here("md/04_github-tab.md"))
+                 ),
         
         tabPanel(title = list(strong("Grants Tab"), 
                           shiny::icon("usd")), 
-       "If you want to explore the scholar’s grants, you can select “Grants” in the sidebar.
-        The “Grant” page provides two plots and one table. The plot on the left displays grant funding in dollars over years and the plot on the right displays the funding proportion of each project. Different colors are used to differentiate the funding projects. The funding table at the bottom of the page displays detailed information (project number, fiscal year, project title and total cost amount in dollars) about the project."
+                 includeMarkdown(here("md/03_grants-tab.md"))
     ),
 
         tabPanel(title = list(strong("Citations Tab"), 
-                          shiny::icon("quote-right")), 
-
-        "If you want to explore the scholar’s citations, you can select “Citations” in the sidebar. The “Citation” page similarly provides two plots and one table. The plot on the left displays the trend of total citations over years. The plot on the right displays the….. The citation table at the bottom of the page displays the top 10 most cited articles of the scholar."
+                          shiny::icon("quote-right")),
+                 includeMarkdown(here("md/02_citations-tab.md"))
     ),
 
         tabPanel(title = list(strong('Scholar App'), 
                           shiny::icon("tablet")),
-             value = 1,
-        "The ‘Scholar’ shiny app helps you get information about citations, NIH/NSF grants and the teaching classes of faculty members at Johns Hopkins School of Public Health. You can first choose a department name and use slider bar to select the scholar you are interested in. After your selection, the information about the position of the scholar and the courses he or she has taught in 2017 would show up."
+                 value = 1,
+                 includeMarkdown(here("md/01_scholar-app.md"))
         )
     )
 ),
-p("Methods"), 
+h5("Methods"), 
 fluidRow(
     tabBox(
         # Title can include an icon
@@ -176,7 +177,7 @@ fluidRow(
 )),
 # Done with info tab
             tabItem(tabName = "grants",
-                    p("Grant Data"), 
+                    h5("Grant Data"), 
                         box(title = list("Funding Timeline", 
                                          shiny::icon("line-chart")),
                             width = 7,
@@ -201,7 +202,7 @@ fluidRow(
 ),
             # Second tab content
             tabItem(tabName = "citations",
-                    p("Citation Data"),
+                    h5("Citation Data"),
                     fluidRow(
                         tabBox(
                             # Title can include an icon

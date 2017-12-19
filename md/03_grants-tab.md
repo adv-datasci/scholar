@@ -1,0 +1,2 @@
+"If you want to explore the scholar’s grants, you can select “Grants” in the sidebar.
+        The “Grant” page provides two plots and one table. The plot on the left displays grant funding in dollars over years and the plot on the right displays the funding proportion of each project. Different colors are used to differentiate the funding projects. The funding table at the bottom of the page displays detailed information (project number, fiscal year, project title and total cost amount in dollars) about the project."
