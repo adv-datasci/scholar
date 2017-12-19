@@ -85,7 +85,7 @@ fluidRow(
                               shiny::icon("user")),
                  width = 4),
              box(title = list(strong('Step 4 -'), 
-                              'Collapse a Box', 
+                              'Collapse Box', 
                               shiny::icon("minus")),
                  width = 4)
 ),
