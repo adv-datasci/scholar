@@ -138,8 +138,14 @@ fluidRow(
             The teaching information for the school year of 2017 - 2018 was obtained by scraping web data from the website of JHSPH faculty (https://www.jhsph.edu/faculty/directory/list/)). Through the process of reading HTML source file, removing non-faculty staff, and extracting the HTML “href” attribute, we have accessed to the URL of each faculty member’s teaching information, and then scraped the course lists from these websites."
             ),
         
+        tabPanel(title = list(strong('Fedreporter'), 
+                              shiny::icon("google")),
+                 "
+            The data of citation were acquired from Google Scholar by using John Muschelli’s “gcite” R package. Citation information for faculty members of JHSPH who have Google Scholar profiles is collected. Data are stored in the form of R list of data frames with the citation information of each faculty member stored in a data frame. The data include titles of published articles, authors, publication dates, publisher, journal, total number of citations for each article and citation numbers in each year."
+        ),
             tabPanel(title = list(strong('Google Scholar'), 
                              shiny::icon("google")),
+                     value = 1,
                 "
             The data of citation were acquired from Google Scholar by using John Muschelli’s “gcite” R package. Citation information for faculty members of JHSPH who have Google Scholar profiles is collected. Data are stored in the form of R list of data frames with the citation information of each faculty member stored in a data frame. The data include titles of published articles, authors, publication dates, publisher, journal, total number of citations for each article and citation numbers in each year."
                 )
@@ -152,17 +158,19 @@ fluidRow(
             width = 12,
             side = "right",
             selected = 1,
-        tabPanel(title = list(strong('Contributors'), 
-                              shiny::icon("thumbs-o-up")),
-                 "We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project below."
-                 ),
         tabPanel(title = list(strong('Packages'), 
                          shiny::icon("dropbox")),
             "The used in the making of the 'Scholar' shiny app are readr (Hadley Wickham), shiny (Joe Cheng) ..."
             ),
-        tabPanel(title = list(strong('Code Snippets'), 
-                         shiny::icon("code")),
-            "The used in the making of the 'Scholar' shiny app are readr (Hadley Wickham), shiny (Joe Cheng) ..."
+        tabPanel(title = list(strong('Contributors'), 
+                              shiny::icon("thumbs-o-up")),
+                 value = 1,
+                 "We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project below."
+                 ),
+        tabPanel(title = list(strong('Authors'), 
+                         shiny::icon("users")),
+                     "The authors of the 'Scholar' shiny app are Gege Gui, Yue Cao, Shulin Qing, and Martin Skarzynski."
+                 
             )
         )
 )),
