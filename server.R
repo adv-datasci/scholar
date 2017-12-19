@@ -133,6 +133,7 @@ function(input, output, session) {
         out = cbind(1:10, out)
         colnames(out) = c("ID", "Title", "Publisher", "Journal", "Publication Date", "Total Citations")
         out %>% 
+            select("ID", "Title", "Publisher", "Journal", "Publication Date", "Total Citations") %>% 
         kable(format = "html") %>%
             kable_styling(bootstrap_options = c("striped", 
                                                 "hover", 

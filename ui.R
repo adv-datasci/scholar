@@ -208,16 +208,18 @@ fluidRow(
                             title = list("Line Charts", 
                                          shiny::icon("line-chart")),
                             width = 7,
+                            selected = 1,
                             side = "right",
-                            tabPanel("Citations",
-                                     plotlyOutput("cite_dot")
-                            ),
                             tabPanel("Publications",
                                      plotlyOutput("pub_dot")
-                                     )
+                                     ),
+                            tabPanel("Citations",
+                                     plotlyOutput("cite_dot"),
+                                     value = 1
+                            )
                         ),
     
-                        box(title = list('Citations by Article', 
+                        box(title = list('Top 10 Most Cited Articles', 
                                          shiny::icon("pie-chart")),
                             width = 5,
                             solidHeader = TRUE,
@@ -225,7 +227,7 @@ fluidRow(
                             plotlyOutput("cite_pie")
                         )), 
                     fluidRow(
-                        box(title = list('Citation Table', 
+                        box(title = list('Top 10 Most Cited Articles', 
                                          shiny::icon("table")),
                             width = 12,
                             solidHeader = TRUE,
