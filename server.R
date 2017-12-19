@@ -26,30 +26,63 @@ function(input, output, session) {
         updateSelectInput(session, "fullname", choices = newname_list, label="Name (Last, First)")
     })
     
+    
+    # t = cite_df_list[[fullname]]
+    # t = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+    # colnames(t) = str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
+    # total_cites = sum(t)
+    # total_pubs = nrow(t)
+    # grant = course_grant_df[which(course_grant_df$Fullname == fullname), ]
+    # total_grant_count = nrow(grant)
+    # total_grant_amount = sum(grant$totalCostAmount)
+    # out = c(total.citation, total.publication, grant.count, grant.total)
+    # names(out) = c("Total Citation", "Total Publication", "Grant Count", "Grant, Total")
+    # print(out)    
+    
+    # out = paste0("Total Grant Funding: ", as.character(course_grant_df[index, "Position"]))
+    
+    output$position = renderText({
+        fullname = input$fullname
+        grant = course_grant_df[which(course_grant_df$Fullname == fullname), ]
+        pos = grant[, "Position"][1]
+        out = paste0("Position: ", pos)
+        print(out)
+    })
+    
     output$total_grant_count = renderText({
         fullname = input$fullname
-        out = paste0("Total Grants: ", fullname)
+        grant = course_grant_df[which(course_grant_df$Fullname == fullname), ]
+        grant_count = nrow(grant)
+        out = paste0("Total Grants: ", grant_count)
         print(out)
     })
     
     
     output$total_grant_amount = renderText({
         fullname = input$fullname
-        index = which(name_list==fullname)[1]
-        out = paste0("Total Grant Funding: ", as.character(course_grant_df[index, "Position"]))
+        grant = course_grant_df[which(course_grant_df$Fullname == fullname), ]
+        grant_amount = sum(grant$totalCostAmount)
+        out = paste0("Total Grant Funding: ", grant_amount)
         print(out)
     })
     
     output$total_cites = renderText({
         fullname = input$fullname
-        index = which(name_list==fullname)[1]
-        out = paste0("Total Citations: ", index)
+        t = cite_df_list[[fullname]]
+        t = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+        colnames(t) = str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
+        cites = sum(t)
+        out = paste0("Total Citations: ", cites)
         print(out)
     })
     
     output$total_pubs = renderText({
-        depart = input$departmentname
-        out = paste0("Total Publications: ", depart)
+        fullname = input$fullname
+        t = cite_df_list[[fullname]]
+        t = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+        colnames(t) = str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
+        pubs = nrow(t)
+        out = paste0("Total Publications: ", pubs)
         print(out)
     })
     output$class = renderUI({
@@ -62,7 +95,20 @@ function(input, output, session) {
     })
     output$pub_tbl = renderUI({
         fullname = input$fullname
-
+        # fullname = input$fullname
+        # cite_df_list[[fullname]] %>% 
+        #     dplyr::select(title,
+        #                   # authors,
+        #                   # publication.date,
+        #                   # total.citations,
+        #                   journal
+        #     ) %>% 
+        #     kable(format = "html") %>%
+        #     kable_styling(bootstrap_options = c("striped", 
+        #                                         "hover", 
+        #                                         "condensed", 
+        #                                         "responsive")) %>% 
+        #     HTML()
         df <- cite_df_list[[fullname]]
         pcite = df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
         pcite = rowSums(pcite)
@@ -83,12 +129,32 @@ function(input, output, session) {
     })
     output$cite_dot = renderPlotly({
         fullname = input$fullname
-        df <- cite_df_list[[fullname]]
-        citey <- df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
-        # years <- grep(pattern = "X?\\d{4}", x = names(df), ignore.case = TRUE, value = TRUE)
-        cy <- data.frame(names(citey), colSums(citey,na.rm = TRUE))
+        t <- cite_df_list[[fullname1]]
+        t = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+        colnames(t) = str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
+        citey = colSums(t)
+        cy = data.frame(as.numeric(names(citey)), citey)
+        # startdefault = min(cy$x)
+        # enddefault = max(cy$x)
         colnames(cy) = c("x", "y")
-        p <- ggplot(data = cy, aes(x, y, group = 1)) + geom_point() + geom_line() + labs(x = "Year", y = "Total Citations")
+        # indstart = which(cy$x == start)
+        # indend = which(cy$x == end)
+        # cy = cy[indstart:indend, ]
+        if (nrow(cy) < 7){
+            k = 1
+        } else if (nrow(cy) < 15){
+            k = 2
+        }else if (nrow(cy) < 22){
+            k = 3
+        }else {
+            k = 5
+        }
+        p = ggplot(data = cy, aes(x, y, group = 1)) + geom_point(color = "#F8766D") + geom_line(color = "#F8766D") + labs(x = "Year", y = "Total Citation", title = "Total Citations By Year")+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(cy$x), max(cy$x), by = k))
+        # citey <- df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
+        # years <- grep(pattern = "X?\\d{4}", x = names(df), ignore.case = TRUE, value = TRUE)
+        # cy <- data.frame(names(citey), colSums(citey,na.rm = TRUE))
+        # colnames(cy) = c("x", "y")
+        # p <- ggplot(data = cy, aes(x, y, group = 1)) + geom_point() + geom_line() + labs(x = "Year", y = "Total Citations")
         ggplotly(p)
     })
 

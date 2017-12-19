@@ -13,6 +13,7 @@ name_list <- course_grant_df$Fullname
 department_list = course_grant_df$Department
 
 body <- dashboardBody(
+    # define HTML paragraph (p) tag styling with CSS
     tags$p(tags$style(HTML('
     p {
         font-family: "Georgia", Times, "Times New Roman", serif;
@@ -41,6 +42,7 @@ body <- dashboardBody(
             width = 3,
             solidHeader = TRUE,
             collapsible = TRUE, 
+            textOutput("position"), 
             textOutput("total_grant_count"), 
             textOutput("total_grant_amount"),
             textOutput("total_cites"), 
@@ -127,15 +129,19 @@ body <- dashboardBody(
                         htmlOutput("grant_tbl")))),
         # Second tab content
         tabItem(tabName = "citations",
-                p("Citation Data"), 
+                p("Citation Data"),
                 fluidRow(
-                    box(title = list("Citations by Year", 
+                    tabBox(
+                        # Title can include an icon
+                        title = list("Line Charts", 
                                      shiny::icon("line-chart")),
                         width = 7,
-                        solidHeader = TRUE,
-                        collapsible = TRUE,
-                        plotlyOutput("cite_dot")
+                        tabPanel("Citations",
+                                 plotlyOutput("cite_dot")
+                        ),
+                        tabPanel("Publications", "Tab content 2")
                     ),
+
                     box(title = list('Citations by Article', 
                                      shiny::icon("pie-chart")),
                         width = 5,
