@@ -16,17 +16,14 @@ department_list = course_grant_df$Department
 body <- dashboardBody(
     # define HTML head (head) tag styling with CSS
     tags$head(tags$style('h3 {
-                              font-family: "Georgia", Times, "Times New Roman", serif;
-                              font-size: 90px;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
                               }'
                               
                               )),
     # define HTML body (body) tag styling with CSS
     tags$body(tags$style(HTML('
     body {
-        margin: 1px;
-        padding: 1px;
-        font-family: "Georgia", Times, "Times New Roman", serif;
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
       }
     '))),
     fluidRow(
