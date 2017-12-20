@@ -17,17 +17,19 @@ body <- dashboardBody(
     # define HTML paragraph (p) tag styling with CSS
     tags$h5(tags$style(HTML('
     h5 {
-        white-space: nowrap,
+        margin: 1px;
+        text-align: center;
+        padding: 1px;
         font-family: "Georgia", Times, "Times New Roman", serif;
         font-weight: bold;
         font-size: 24px;
-        text-align: center;
       }
     '))),
     fluidRow(
         box(title = list("Select Scholar",
                          shiny::icon("user")),
             width = 3,
+            status = "primary",
             solidHeader = TRUE,
             collapsible = TRUE, 
             selectInput("departmentname", 
@@ -42,6 +44,7 @@ body <- dashboardBody(
         box(title = list("Scholar Stats",
                          shiny::icon("id-card")),
             width = 3,
+            status = "primary",
             solidHeader = TRUE,
             collapsible = TRUE, 
             textOutput("position"), 
@@ -53,8 +56,10 @@ body <- dashboardBody(
         box(title = list("Courses Taught in 2017", 
                          shiny::icon("graduation-cap")),
             width = 6,
+            status = "primary",
             solidHeader = TRUE,
-            collapsible = TRUE, 
+            collapsible = TRUE,
+            
             htmlOutput("class"))
         ),
     tabItems(
@@ -75,6 +80,7 @@ fluidRow(
                               ', or GitHub (link to code & data)',
                               shiny::icon("github")
                               ),
+                status = "primary",
                 collapsible = TRUE,
                 collapsed = TRUE,
                  width = 12))
@@ -83,18 +89,21 @@ fluidRow(
              box(title = list(strong('Step 2 -'), 
                               'Collapse Sidebar', 
                               shiny::icon("bars")),
+                status = "primary",
                 collapsible = TRUE,
                 collapsed = TRUE,
                  width = 4),
              box(title = list(strong('Step 3 -'),
                               'Choose Scholar', 
                               shiny::icon("user")),
+                status = "primary",
                 collapsible = TRUE,
                 collapsed = TRUE,
                  width = 4),
              box(title = list(strong('Step 4 -'), 
                               'Collapse Box', 
                               shiny::icon("minus")),
+                status = "primary",
                 collapsible = TRUE,
                 collapsed = TRUE,
                  width = 4)
@@ -183,10 +192,12 @@ fluidRow(
 )),
 # Done with info tab
             tabItem(tabName = "grants",
+                fluidRow(
                     h5("Grant Data"), 
                         box(title = list("Funding Timeline", 
                                          shiny::icon("line-chart")),
                             width = 7,
+                            status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE, 
                             plotlyOutput("grant_dot")
@@ -194,6 +205,7 @@ fluidRow(
                         box(title = list('Funding Proportions', 
                                          shiny::icon("pie-chart")),
                             width = 5,
+                            status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE,
                             plotlyOutput("grant_pie")
@@ -201,11 +213,12 @@ fluidRow(
                         box(title = list('Funding Table', 
                                          shiny::icon("table")),
                             width = 12,
+                            status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE,
                             htmlOutput("grant_tbl")
                             )
-),
+)),
             # Second tab content
             tabItem(tabName = "citations",
                     h5("Citation Data"),
@@ -229,6 +242,7 @@ fluidRow(
                         box(title = list('Top 10 Most Cited Articles', 
                                          shiny::icon("pie-chart")),
                             width = 5,
+                            status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE,
                             plotlyOutput("cite_pie")
@@ -237,6 +251,7 @@ fluidRow(
                         box(title = list('Top 10 Most Cited Articles', 
                                          shiny::icon("table")),
                             width = 12,
+                            status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE,
                             htmlOutput("pub_tbl")
