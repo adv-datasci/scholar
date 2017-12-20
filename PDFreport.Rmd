@@ -124,7 +124,7 @@ pub_dot
 
 ```{r g_dot}
 out <- course_grant_df %>%
-    dplyr::filter(Fullname == fullname1) 
+    dplyr::filter(Fullname == fullname) 
 out <- out[order(out$totalCostAmount, decreasing = T), ] %>%
     dplyr::select(projectNumber,
                   fy,
