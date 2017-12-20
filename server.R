@@ -131,9 +131,9 @@ function(input, output, session) {
         }
         out = t[, colnames(t) %in% c("title", "publication.date", "publisher", "journal", "pcite")]
         out = cbind(1:10, out)
-        colnames(out) = c("ID", "Title", "Publisher", "Journal", "Publication Date", "Total Citations")
+        colnames(out) = c("ID", "Article Title", "Publisher", "Journal", "Date", "Citations")
         out %>% 
-            select("ID", "Title", "Publisher", "Journal", "Publication Date", "Total Citations") %>% 
+            select("ID", "Article Title", "Publisher", "Journal", "Date", "Citations") %>% 
         kable(format = "html") %>%
             kable_styling(bootstrap_options = c("striped", 
                                                 "hover", 
@@ -231,12 +231,14 @@ function(input, output, session) {
             )
     })    
     output$grant_tbl = renderUI({
-        course_grant_df %>%
+        out <- course_grant_df %>%
             dplyr::filter(Fullname == input$fullname) %>% 
             dplyr::select(projectNumber,
                           fy,
                           title,
-                          totalCostAmount) %>% 
+                          totalCostAmount)  
+            colnames(out) = c("Number", "Year", "Title", "Amount")
+            out %>% 
             kable(format = "html") %>%
         kable_styling(bootstrap_options = c("striped", 
                                             "hover", 

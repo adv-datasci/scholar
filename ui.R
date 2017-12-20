@@ -14,18 +14,14 @@ name_list <- course_grant_df$Fullname
 department_list = course_grant_df$Department
 
 body <- dashboardBody(
-    # define HTML paragraph (p) tag styling with CSS
-    tags$h5(tags$style(HTML('
-    h5 {
-        margin: 1px;
-        text-align: center;
-        padding: 1px;
-        font-family: "Georgia", Times, "Times New Roman", serif;
-        font-weight: bold;
-        font-size: 24px;
-      }
-    '))),
-    # define HTML paragraph (body) tag styling with CSS
+    # define HTML head (head) tag styling with CSS
+    tags$head(tags$style('h3 {
+                              font-family: "Georgia", Times, "Times New Roman", serif;
+                              font-size: 90px;
+                              }'
+                              
+                              )),
+    # define HTML body (body) tag styling with CSS
     tags$body(tags$style(HTML('
     body {
         margin: 1px;
@@ -34,7 +30,7 @@ body <- dashboardBody(
       }
     '))),
     fluidRow(
-        box(title = list("Select Scholar",
+        box(title = list(strong("Select Scholar"),
                          shiny::icon("user")),
             width = 3,
             status = "primary",
@@ -49,7 +45,7 @@ body <- dashboardBody(
                         choices=name_list,
                         selected=2)
         ),
-        box(title = list("Scholar Stats",
+        box(title = list(strong("Scholar Stats"),
                          shiny::icon("id-card")),
             width = 3,
             status = "primary",
@@ -61,7 +57,7 @@ body <- dashboardBody(
             textOutput("total_cites"), 
             textOutput("total_pubs") 
         ),
-        box(title = list("Courses Taught in 2017", 
+        box(title = list(strong("Courses Taught in 2017"), 
                          shiny::icon("graduation-cap")),
             width = 6,
             status = "primary",
@@ -75,7 +71,16 @@ body <- dashboardBody(
         tabItem(
 # reset whitespace in info tab
 tabName = "info",
-h5("Quick Start Guide"), 
+fluidRow(
+    tags$div(align = "center",
+             box(background = "blue",
+                 title = list(strong("Quick Start Guide"), 
+                              shiny::icon("hourglass-start")),
+                 status = "primary",
+                 collapsible = TRUE,
+                 collapsed = TRUE,
+                 width = 12
+             ))), 
 fluidRow(
     tags$div(align = "center",
              box(title = list(strong('Step 1 -'),
@@ -147,7 +152,16 @@ fluidRow(
         )
     )
 ),
-h5("Methods"), 
+fluidRow(
+    tags$div(align = "center",
+box(background = "blue",
+    title = list(strong("Methods"), 
+                 shiny::icon("cogs")),
+    status = "primary",
+    collapsible = TRUE,
+    collapsed = TRUE,
+    width = 12
+    ))), 
 fluidRow(
     tabBox(
         # Title can include an icon
@@ -201,8 +215,17 @@ fluidRow(
 # Done with info tab
             tabItem(tabName = "grants",
                 fluidRow(
-                    h5("Grant Data"), 
-                        box(title = list("Funding Timeline", 
+                    tags$div(align = "center",
+                             box(background = "blue",
+                                 title = list(strong("Grant Data"), 
+                                              shiny::icon("usd")),
+                                 status = "primary",
+                                 collapsible = TRUE,
+                                 collapsed = TRUE,
+                                 width = 12
+                             ))), 
+                fluidRow(
+                        box(title = list("Grant Timeline", 
                                          shiny::icon("line-chart")),
                             width = 7,
                             status = "primary",
@@ -210,7 +233,7 @@ fluidRow(
                             collapsible = TRUE, 
                             plotlyOutput("grant_dot")
                         ),
-                        box(title = list('Funding Proportions', 
+                        box(title = list('Grant Proportions', 
                                          shiny::icon("pie-chart")),
                             width = 5,
                             status = "primary",
@@ -218,7 +241,7 @@ fluidRow(
                             collapsible = TRUE,
                             plotlyOutput("grant_pie")
                         ), 
-                        box(title = list('Funding Table', 
+                        box(title = list('Grant Table', 
                                          shiny::icon("table")),
                             width = 12,
                             status = "primary",
@@ -229,7 +252,16 @@ fluidRow(
 )),
             # Second tab content
             tabItem(tabName = "citations",
-                    h5("Citation Data"),
+                    fluidRow(
+                        tags$div(align = "center",
+                                 box(background = "blue",
+                                     title = list(strong("Citation Data"), 
+                                                  shiny::icon("quote-right")),
+                                     status = "primary",
+                                     collapsible = TRUE,
+                                     collapsed = TRUE,
+                                     width = 12
+                                 ))), 
                     fluidRow(
                         tabBox(
                             # Title can include an icon
