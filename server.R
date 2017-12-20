@@ -102,7 +102,7 @@ function(input, output, session) {
         colnames(t) = str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
         citey = colSums(t)
         cy = data.frame(as.numeric(names(citey)), citey)
-        colnames(cy) = c("x", "y")
+        colnames(cy) = c("Year", "Count")
         if (nrow(cy) < 7){
             k = 1
         } else if (nrow(cy) < 15){
@@ -112,7 +112,7 @@ function(input, output, session) {
         }else {
             k = 5
         }
-        p = ggplot(data = cy, aes(x, y, group = 1)) + geom_point(color = "#F8766D") + geom_line(color = "#F8766D") + labs(x = "Year", y = "Total Citation", title = "Total Citations By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(cy$x), max(cy$x), by = k))
+        p = ggplot(data = cy, aes(Year, Count, group = 1)) + geom_point(color = "#F8766D") + geom_line(color = "#F8766D") + labs(Year = "Year", y = "Total Citation", title = "Total Citations By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(cy$Year), max(cy$Year), by = k))
         ggplotly(p)
     })
     output$pub_dot = renderPlotly({
@@ -126,7 +126,7 @@ function(input, output, session) {
         yr = data.frame(str_split(t, pattern = fixed("/"), simplify = T)[,1])
         yr = table(yr)
         yr = data.frame(as.numeric(names(yr)), yr)
-        colnames(yr) = c("x", "name", "y")
+        colnames(yr) = c("Year", "name", "Count")
         if (nrow(yr) < 7){
             k = 1
         } else if (nrow(yr) < 15){
@@ -136,7 +136,7 @@ function(input, output, session) {
         }else {
             k = 5
         }
-        p = ggplot(data = yr, aes(x, y, group = 1)) + geom_point(color = "#619CFF") + geom_line(color = "#619CFF") + labs(x = "Year", y = "Total Publication", title = "Total Publication By Year")+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(yr$x), max(yr$x), by = k))
+        p = ggplot(data = yr, aes(Year, Count, group = 1)) + geom_point(color = "#619CFF") + geom_line(color = "#619CFF") + labs(x = "Year", y = "Total Publication", title = "Total Publication By Year")+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(yr$Year), max(yr$Year), by = k))
         ggplotly(p)
     })
     output$cite_pie <- renderPlotly({
@@ -213,21 +213,22 @@ function(input, output, session) {
                 color = ~title,
                 mode = 'markers',
                 symbol = I(1),
-                marker = list(size = 10,
+                marker = list(size = 15,
                               fill = "none",
                               line = list(color = ~title,
-                                          width = 2))) %>% 
+                                          width = 4))) %>% 
             layout(showlegend = FALSE,
-                   yaxis = list(title = 'Dollars', 
+                   yaxis = list(title = 'Dollars',
+                                # ticks = "outside", 
+                                ticklen = 5, 
+                                tickwidth = 2, 
                                 tickcolor = toRGB("blue")),
                    xaxis = list(title = 'Fiscal Year', 
                                 autotick = FALSE, 
-                                ticks = "outside", 
-                          tick0 = 0, 
-                          dtick = 1, 
-                          ticklen = 5, 
-                          tickwidth = 2, 
-                          tickcolor = toRGB("blue")))
+                                dtick = 1, 
+                                ticklen = 5, 
+                                tickwidth = 2, 
+                                tickcolor = toRGB("blue")))
   })
 
   

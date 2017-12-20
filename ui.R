@@ -8,7 +8,7 @@ library(readr)
 library(shinydashboard)
 library(markdown)
 
-course_grant_df <- read_rds(here("data/course_grant_df.rds"))
+course_grant_df <- read_rds(here("course_grant_df.rds"))
 
 name_list <- course_grant_df$Fullname
 department_list = course_grant_df$Department
