@@ -15,4 +15,4 @@ We are working on adding a report download button.
 If you have a request for a feature, please submit a pull request or an [issue](https://github.com/adv-datasci/scholar/issues).
 
 #### Bugs
-If you find a bug, please submit an issue on [GitHub](https://github.com/adv-datasci/scholar/issues).
+If you find a bug, please submit a pull request or an issue on [GitHub](https://github.com/adv-datasci/scholar/issues).
