@@ -1,0 +1,81 @@
+---
+title: "Scholar Report"
+output: html_document
+params:
+  n: NA
+---
+
+```{r setup, include=FALSE, echo = FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+```
+
+```{r load_pkgs}
+library(magrittr)
+library(purrr)
+library(plotly)
+library(ggplot2)
+library(stringr)
+library(readr)
+library(DT)
+library(kableExtra)
+```
+
+```{r load_data}
+course_grant_df <- read_rds(here("data/course_grant_df.rds"))
+cite_df_list <- read_rds(here("data/cite_df_list.rds"))
+```
+
+
+```{r get_param}
+fullname = params$n
+```
+
+
+```{r position}
+grant <- course_grant_df[which(course_grant_df$Fullname == fullname), ]
+pos <- grant[, "Position"][1]
+```
+
+```{r g_count}
+grant <- course_grant_df[which(course_grant_df$Fullname == fullname), ]
+grant_count <- nrow(grant)
+```
+
+```{r g_amount}
+grant <- course_grant_df[which(course_grant_df$Fullname == fullname), ]
+grant_amount <- sum(grant$totalCostAmount)
+```
+
+```{r c_count}
+t <- cite_df_list[[fullname]]
+t <- t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+colnames(t) <- str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
+cites <- sum(t)
+```
+
+```{r p_count}
+t <- cite_df_list[[fullname]]
+t <- t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
+colnames(t) <- str_split(colnames(t), pattern = fixed("X"), simplify = T)[,2]
+pubs <- nrow(t)
+```
+
+
+```{r}
+stats <- data.frame(fullname,
+                    pos,
+                    grant_count,
+                    grant_amount,
+                    cites,
+                    pubs)
+names(stats) <- c("Name", "Position", "Total Grants", "Total Grant Funding", "Total Citations", "Total Publications")
+stats %>% 
+kable("html") %>%
+  kable_styling(bootstrap_options = c("hover", 
+                                      "condensed", 
+                                      "responsive"))
+```
+
+```{r}
+```
+
