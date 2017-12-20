@@ -7,6 +7,7 @@ library(here)
 library(ggplot2)
 library(stringr)
 library(readr)
+library(DT)
 
 course_grant_df <- read_rds(here("course_grant_df.rds"))
 

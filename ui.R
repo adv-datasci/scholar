@@ -5,6 +5,7 @@ library(plotly)
 library(readr)
 library(shinydashboard)
 library(markdown)
+library(DT)
 
 course_grant_df <- read_rds(here("course_grant_df.rds"))
 
