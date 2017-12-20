@@ -1,0 +1,1 @@
+We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project in the tab to the right.

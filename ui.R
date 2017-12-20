@@ -131,24 +131,19 @@ fluidRow(
         width = 12,
         side = "right",
         selected = 1,
-        tabPanel(title = list(strong('JHSPH website'), 
+        tabPanel(title = list(strong('JHSPH faculty'), 
                          shiny::icon("globe")),
-            
-            "Teaching Courses:
-            
-            The teaching information for the school year of 2017 - 2018 was obtained by scraping web data from the website of JHSPH faculty (https://www.jhsph.edu/faculty/directory/list/)). Through the process of reading HTML source file, removing non-faculty staff, and extracting the HTML “href” attribute, we have accessed to the URL of each faculty member’s teaching information, and then scraped the course lists from these websites."
+                 includeMarkdown(here("md/07_jhsph-faculty.md"))
             ),
         
         tabPanel(title = list(strong('NIH RePORTER'), 
                               shiny::icon("search")),
-                 "
-            The data of citation were acquired from Google Scholar by using John Muschelli’s “gcite” R package. Citation information for faculty members of JHSPH who have Google Scholar profiles is collected. Data are stored in the form of R list of data frames with the citation information of each faculty member stored in a data frame. The data include titles of published articles, authors, publication dates, publisher, journal, total number of citations for each article and citation numbers in each year."
+                 includeMarkdown(here("md/06_nih-reporter.md"))
         ),
             tabPanel(title = list(strong('Google Scholar'), 
                              shiny::icon("google")),
                      value = 1,
-                "
-            The data of citation were acquired from Google Scholar by using John Muschelli’s “gcite” R package. Citation information for faculty members of JHSPH who have Google Scholar profiles is collected. Data are stored in the form of R list of data frames with the citation information of each faculty member stored in a data frame. The data include titles of published articles, authors, publication dates, publisher, journal, total number of citations for each article and citation numbers in each year."
+                 includeMarkdown(here("md/05_google-scholar.md"))
                 )
     )
 ),
@@ -159,19 +154,22 @@ fluidRow(
             width = 12,
             side = "right",
             selected = 1,
+            tabPanel(title = list(strong('Bugs'), 
+                                  shiny::icon("bug")),
+                 includeMarkdown(here("md/11_bugs.md"))
+            ),
         tabPanel(title = list(strong('Packages'), 
                          shiny::icon("dropbox")),
-            "The used in the making of the 'Scholar' shiny app are readr (Hadley Wickham), shiny (Joe Cheng) ..."
+                 includeMarkdown(here("md/10_packages.md"))
             ),
         tabPanel(title = list(strong('Contributors'), 
                               shiny::icon("thumbs-o-up")),
-                 "We would like to thank two amazing contributors to this project: John Muschelli and Stephen Cristiano. Both provided code snippets and guidance. For data scraping in particular, we relied heavily on packages created by John. For more information, please take a look at a list of packages and code snippets we used during the creation of the project below."
+                 includeMarkdown(here("md/09_contributors.md"))
                  ),
         tabPanel(title = list(strong('Authors'), 
                          shiny::icon("users")),
                  value = 1,
-                     "The authors of the 'Scholar' shiny app are Gege Gui, Yue Cao, Shulin Qing, and Martin Skarzynski."
-                 
+                 includeMarkdown(here("md/08_authors.md"))
             )
         )
 )),
