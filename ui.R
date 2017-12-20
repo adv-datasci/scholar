@@ -25,6 +25,14 @@ body <- dashboardBody(
         font-size: 24px;
       }
     '))),
+    # define HTML paragraph (body) tag styling with CSS
+    tags$body(tags$style(HTML('
+    body {
+        margin: 1px;
+        padding: 1px;
+        font-family: "Georgia", Times, "Times New Roman", serif;
+      }
+    '))),
     fluidRow(
         box(title = list("Select Scholar",
                          shiny::icon("user")),
