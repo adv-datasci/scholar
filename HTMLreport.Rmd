@@ -16,7 +16,6 @@ library(plotly)
 library(ggplot2)
 library(stringr)
 library(readr)
-library(DT)
 library(kableExtra)
 ```
 
@@ -92,12 +91,12 @@ if (nrow(cy) < 7){
 }else {
     k = 5
 }
-cite_dot <- ggplot(data = cy, aes(Year, Count, group = 1)) + geom_point(color = "#F8766D") + geom_line(color = "#F8766D") + labs(Year = "Year", y = "Total Citations", title = "Total Citations By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(cy$Year), max(cy$Year), by = k))
+cite_dot <- ggplot(data = cy, aes(Year, Count, group = 1)) + geom_point(color = "#F8766D", size = 4) + geom_line(color = "#F8766D") + labs(Year = "Year", y = " ", title = "Citations By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position="none") + scale_x_continuous(breaks=seq(min(cy$Year), max(cy$Year), by = k))
 cite_dot %>% 
     ggplotly()
 ```
 
-```{r}
+```{r pub_dot}
 t <- cite_df_list[[fullname]]
 if (sum(colnames(t) == "publication.date.1") == 1){
     t$publication.date <- t$publication.date.1
@@ -117,8 +116,38 @@ if (nrow(yr) < 7){
 }else {
     k = 5
 }
-pub_dot <- ggplot(data = yr, aes(Year, Count, group = 1)) + geom_point(color = "#619CFF") + geom_line(color = "#619CFF") + labs(x = "Year", y = "Total Publications", title = "Total Publications By Year")+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(yr$Year), max(yr$Year), by = k)) 
+pub_dot <- ggplot(data = yr, aes(Year, Count, group = 1)) + geom_point(color = "#619CFF", size = 4) + geom_line(color = "#619CFF") + labs(x = "Year", y = " ", title = "Publications By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position="none") + scale_x_continuous(breaks=seq(min(yr$Year), max(yr$Year), by = k)) 
 
 pub_dot %>% 
     ggplotly()
 ```
+
+
+```{r g_dot}
+out <- course_grant_df %>%
+    dplyr::filter(Fullname == fullname1) 
+out <- out[order(out$totalCostAmount, decreasing = T), ] %>%
+    dplyr::select(projectNumber,
+                  fy,
+                  title,
+                  totalCostAmount)  %>% unique()
+    rownames(out) <- 1:nrow(out)
+    colnames(out) <- c("Number", "Year", "Title", "Amount")
+
+g_dot <- ggplot(data = out, 
+       aes(x = Year,y = Amount, color = factor(Title))) + 
+    geom_point(size = 4) + 
+    labs(x = "Year", 
+         y = " ", 
+         title = "Grants By Year") + 
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_blank(), 
+          axis.line = element_line(colour = "black"), 
+          legend.position="none") + 
+            scale_y_continuous(labels = scales::comma)
+
+g_dot %>% 
+    ggplotly()
+```
+
