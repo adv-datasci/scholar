@@ -138,7 +138,18 @@ function(input, output, session) {
         rownames(t) <- 1:nrow(t)
         colnames(t) <- c("Article Title", "Publisher", "Journal", "Date", "Citations")
         t %>%
-            DT::datatable()
+            DT::datatable(
+                extensions = 'Buttons', options = list(
+                    dom = 'Bfrtip',
+                    buttons = 
+                        list('copy', 'print', list(
+                            extend = 'collection',
+                            buttons = c('csv', 'excel', 'pdf'),
+                            text = 'Download'
+                        ))
+                    
+                )
+            )
     })
     output$cite_dot <- renderPlotly({
         fullname <- input$fullname
@@ -223,7 +234,18 @@ function(input, output, session) {
             rownames(out) <- 1:nrow(out)
             colnames(out) <- c("Number", "Year", "Title", "Amount")
             out  %>% 
-            DT::datatable()
+                DT::datatable(
+                    extensions = 'Buttons', options = list(
+                        dom = 'Bfrtip',
+                        buttons = 
+                            list('copy', 'print', list(
+                                extend = 'collection',
+                                buttons = c('csv', 'excel', 'pdf'),
+                                text = 'Download'
+                            ))
+                        
+                    )
+                )
     })
     
     # FIRST REACTIVE PLOT
