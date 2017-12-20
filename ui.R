@@ -75,20 +75,28 @@ fluidRow(
                               ', or GitHub (link to code & data)',
                               shiny::icon("github")
                               ),
+                collapsible = TRUE,
+                collapsed = TRUE,
                  width = 12))
 ),
 fluidRow(
              box(title = list(strong('Step 2 -'), 
                               'Collapse Sidebar', 
                               shiny::icon("bars")),
+                collapsible = TRUE,
+                collapsed = TRUE,
                  width = 4),
              box(title = list(strong('Step 3 -'),
                               'Choose Scholar', 
                               shiny::icon("user")),
+                collapsible = TRUE,
+                collapsed = TRUE,
                  width = 4),
              box(title = list(strong('Step 4 -'), 
                               'Collapse Box', 
                               shiny::icon("minus")),
+                collapsible = TRUE,
+                collapsed = TRUE,
                  width = 4)
 ),
 fluidRow(
