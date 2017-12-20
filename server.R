@@ -11,9 +11,9 @@ library(ggplot2)
 library(stringr)
 library(readr)
 
-course_grant_df <- read_rds(here("data/course_grant_df.rds"))
+course_grant_df <- read_rds(here("course_grant_df.rds"))
 
-cite_df_list <- read_rds(here("data/cite_df_list.rds"))
+cite_df_list <- read_rds(here("cite_df_list.rds"))
 
 name_list <- course_grant_df$Fullname
 department_list <- course_grant_df$Department
