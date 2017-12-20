@@ -247,7 +247,7 @@ fluidRow(
                             status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE,
-                            htmlOutput("grant_tbl")
+                            DT::dataTableOutput("grant_tbl")
                             )
 )),
             # Second tab content
@@ -288,13 +288,13 @@ fluidRow(
                             plotlyOutput("cite_pie")
                         )), 
                     fluidRow(
-                        box(title = list('Top 10 Most Cited Articles', 
+                        box(title = list('Citation Table', 
                                          shiny::icon("table")),
                             width = 12,
                             status = "primary",
                             solidHeader = TRUE,
                             collapsible = TRUE,
-                            htmlOutput("pub_tbl")
+                            DT::dataTableOutput("pub_tbl")
                         ))
             )
         )

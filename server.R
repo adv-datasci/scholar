@@ -93,53 +93,23 @@ function(input, output, session) {
         out <- str_c(allc, collapse = '<br/>')
         HTML(out)
     })
-    output$pub_tbl = renderUI({
+    output$pub_tbl = DT::renderDataTable({
         fullname = input$fullname
-        # fullname = input$fullname
-        # cite_df_list[[fullname]] %>% 
-        #     dplyr::select(title,
-        #                   # authors,
-        #                   # publication.date,
-        #                   # total.citations,
-        #                   journal
-        #     ) %>% 
-        #     kable(format = "html") %>%
-        #     kable_styling(bootstrap_options = c("striped", 
-        #                                         "hover", 
-        #                                         "condensed", 
-        #                                         "responsive")) %>% 
-        #     HTML()
-        # df <- cite_df_list[[fullname]]
-        # pcite = df[, colnames(df) %in% regmatches(colnames(df),regexpr("X\\d{4}",colnames(df)))]
-        # pcite = rowSums(pcite)
-        # ind = order(pcite, decreasing = TRUE)
-        # index = which(ind %in% 1:10)
-        # ta = df[index, ]
-        # id = 1:10
-        # out = cbind(id, ta[, colnames(ta) %in% c("title", "publication.date", "total.citations")])
-        # out[,4] = as.integer(out[,4])
-        # colnames(out) = c("ID", "Title", "Publication Date", "Total Citations")
-        t = cite_df_list[[fullname]]
+        t = cite_df_list[[fullname1]]
         pcite = t[, colnames(t) %in% regmatches(colnames(t),regexpr("X\\d{4}",colnames(t)))]
         colnames(pcite) = str_split(colnames(pcite), pattern = fixed("X"), simplify = T)[,2]
         pcite = rowSums(pcite)
         t = cbind(t, pcite)
         t = t[order(t$pcite, decreasing = T), ]
-        t = t[1:10, ]
         if (sum(colnames(t) == "publication.date.1") == 1){
             t$publication.date = t$publication.date.1
         }
-        out = t[, colnames(t) %in% c("title", "publication.date", "publisher", "journal", "pcite")]
-        out = cbind(1:10, out)
-        colnames(out) = c("ID", "Article Title", "Publisher", "Journal", "Date", "Citations")
-        out %>% 
-            select("ID", "Article Title", "Publisher", "Journal", "Date", "Citations") %>% 
-        kable(format = "html") %>%
-            kable_styling(bootstrap_options = c("striped", 
-                                                "hover", 
-                                                "condensed", 
-                                                "responsive")) %>% 
-            HTML()
+        t <- t %>% dplyr::select("title", "publisher", "journal","publication.date", "pcite") %>% 
+            unique()
+        rownames(t) <- 1:nrow(t)
+        colnames(t) = c("Article Title", "Publisher", "Journal", "Date", "Citations")
+        t %>%
+            DT::datatable()
     })
     output$cite_dot = renderPlotly({
         fullname = input$fullname
@@ -230,21 +200,18 @@ function(input, output, session) {
                                 showticklabels = FALSE)
             )
     })    
-    output$grant_tbl = renderUI({
+    output$grant_tbl <- DT::renderDataTable({
         out <- course_grant_df %>%
-            dplyr::filter(Fullname == input$fullname) %>% 
+            dplyr::filter(Fullname == input$fullname) 
+        out <- out[order(out$totalCostAmount, decreasing = T), ] %>%
             dplyr::select(projectNumber,
                           fy,
                           title,
-                          totalCostAmount)  
+                          totalCostAmount)  %>% unique()
+            rownames(out) <- 1:nrow(out)
             colnames(out) = c("Number", "Year", "Title", "Amount")
-            out %>% 
-            kable(format = "html") %>%
-        kable_styling(bootstrap_options = c("striped", 
-                                            "hover", 
-                                            "condensed", 
-                                            "responsive")) %>% 
-            HTML()
+            out  %>% 
+            DT::datatable()
     })
     
     # FIRST REACTIVE PLOT
