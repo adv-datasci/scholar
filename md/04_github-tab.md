@@ -1,1 +1,1 @@
-The `GitHub` tab in the sidebar directs you to the GitHub page of the Scholar project where it provides all R codes and data files.
+The `GitHub` tab in the sidebar directs you to the GitHub page of the Scholar project, which contains the latest version of the app code (top-level `server.R` and `ui.R` files), the data the app displays, and all of the R scripts used to collect the data.
