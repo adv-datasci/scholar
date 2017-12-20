@@ -131,7 +131,7 @@ fluidRow(
         width = 12,
         side = "right",
         selected = 1,
-        tabPanel(title = list(strong('JHSPH faculty'), 
+        tabPanel(title = list(strong('JHSPH Faculty'), 
                          shiny::icon("globe")),
                  includeMarkdown(here("md/07_jhsph-faculty.md"))
             ),
