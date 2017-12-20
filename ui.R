@@ -9,7 +9,7 @@ library(markdown)
 course_grant_df <- read_rds(here("course_grant_df.rds"))
 
 name_list <- course_grant_df$Fullname
-department_list = course_grant_df$Department
+department_list <- course_grant_df$Department
 
 body <- dashboardBody(
     # define HTML head (head) tag styling with CSS
@@ -50,7 +50,9 @@ body <- dashboardBody(
             textOutput("total_grant_count"), 
             textOutput("total_grant_amount"),
             textOutput("total_cites"), 
-            textOutput("total_pubs") 
+            textOutput("total_pubs"),
+            downloadButton("reportpdf", "PDF report"),
+            downloadButton("reporthtml", "HTML report")
         ),
         box(title = list(strong("Courses Taught in 2017"), 
                          shiny::icon("graduation-cap")),
