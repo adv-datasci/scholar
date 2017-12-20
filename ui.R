@@ -1,5 +1,3 @@
-# install.packages("here")
-# install.packages("shinydashboard")
 library(here)
 library(shiny)
 library(ggplot2)

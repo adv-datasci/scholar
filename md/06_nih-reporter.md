@@ -1,4 +1,4 @@
-The data of grants were acquired from the [NIH RePORTER website](https://projectreporter.nih.gov/reporter.cfm) using a custom R script (in the code folder in our [GitHub repo](https://github.com/adv-datasci/scholar)) and the [`fedreporter` R package](https://cran.r-project.org/web/packages/fedreporter/index.html) created by John Muschelli.
+The data of grants were acquired from the [NIH RePORTER website](https://projectreporter.nih.gov/reporter.cfm) using a custom R script (in the code folder in our [GitHub repo](https://github.com/adv-datasci/scholar)) and the [`fedreporter` R package](https://cran.r-project.org/web/packages/fedreporter/index.html) created by [John Muschelli](https://github.com/muschellij2).
 
 The data were obtained in the form of nested list of lists and were processed into an R data frames with the `purrr` and `data.table` packages.
 
