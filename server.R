@@ -8,6 +8,7 @@ library(ggplot2)
 library(stringr)
 library(readr)
 library(DT)
+library(scales)
 
 course_grant_df <- read_rds(here("data/course_grant_df.rds"))
 
@@ -19,8 +20,7 @@ department_list <- course_grant_df$Department
 function(input, output, session) {
     output$reporthtml <- downloadHandler(
         # For PDF output, change this to "report.pdf"
-        filename <- paste0(input$fullname, "_scholar_report.html") %>% 
-            gsub(pattern = ", ", replacement = "_", x = .),
+        filename <- "scholar_report.html",  
         content = function(file) {
             # Copy the report file to a temporary directory before processing it, in
             # case we don't have write permissions to the current working dir (which
@@ -43,8 +43,7 @@ function(input, output, session) {
     
         output$reportpdf <- downloadHandler(
             # For HTML output, change this to "report.html"
-            filename <- paste0(input$fullname, "_scholar_report.pdf") %>% 
-            gsub(pattern = ", ", replacement = "_", x = .),
+            filename <- "scholar_report.pdf",  
             content <- function(file) {
                 # Copy the report file to a temporary directory before processing it, in
                 # case we don't have write permissions to the current working dir (which
@@ -168,7 +167,7 @@ function(input, output, session) {
         }else {
             k = 5
         }
-        p <- ggplot(data = cy, aes(Year, Count, group = 1)) + geom_point(color = "#F8766D") + geom_line(color = "#F8766D") + labs(Year = "Year", y = "Total Citation", title = "Total Citations By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(cy$Year), max(cy$Year), by = k))
+        p <- ggplot(data = cy, aes(Year, Count, group = 1)) + geom_point(color = "#F8766D", size = 4) + geom_line(color = "#F8766D") + labs(Year = "Year", y = " ", title = "Citations By Year") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(cy$Year), max(cy$Year), by = k))
         ggplotly(p)
     })
     output$pub_dot <- renderPlotly({
@@ -192,7 +191,7 @@ function(input, output, session) {
         }else {
             k = 5
         }
-        p <- ggplot(data = yr, aes(Year, Count, group = 1)) + geom_point(color = "#619CFF") + geom_line(color = "#619CFF") + labs(x = "Year", y = "Total Publication", title = "Total Publication By Year")+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(yr$Year), max(yr$Year), by = k))
+        p <- ggplot(data = yr, aes(Year, Count, group = 1)) + geom_point(color = "#619CFF", size = 4) + geom_line(color = "#619CFF") + labs(x = "Year", y = " ", title = "Publications By Year")+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),panel.background = element_blank(), axis.line = element_line(colour = "black")) + scale_x_continuous(breaks=seq(min(yr$Year), max(yr$Year), by = k))
         ggplotly(p)
     })
     output$cite_pie <- renderPlotly({
@@ -271,31 +270,29 @@ function(input, output, session) {
     # SECOND REACTIVE PLOT
     ## Reactive plot: Grant scatter plot
     output$grant_dot <- renderPlotly({
-        course_grant_df %>% 
-            dplyr::filter(Fullname == input$fullname) %>% 
-            plot_ly(
-                y = ~totalCostAmount,
-                x = ~fy,
-                type = 'scatter', 
-                color = ~title,
-                mode = 'markers',
-                symbol = I(1),
-                marker = list(size = 15,
-                              fill = "none",
-                              line = list(color = ~title,
-                                          width = 4))) %>% 
-            layout(showlegend = FALSE,
-                   yaxis = list(title = 'Dollars',
-                                # ticks = "outside", 
-                                ticklen = 5, 
-                                tickwidth = 2, 
-                                tickcolor = toRGB("blue")),
-                   xaxis = list(title = 'Fiscal Year', 
-                                autotick = FALSE, 
-                                dtick = 1, 
-                                ticklen = 5, 
-                                tickwidth = 2, 
-                                tickcolor = toRGB("blue")))
+        out <- course_grant_df %>%
+            dplyr::filter(Fullname == input$fullname) 
+        out <- out[order(out$totalCostAmount, decreasing = T), ] %>%
+            dplyr::select(projectNumber,
+                          fy,
+                          title,
+                          totalCostAmount)  %>% unique()
+        rownames(out) <- 1:nrow(out)
+        colnames(out) <- c("Number", "Year", "Title", "Amount")
+        
+        p <- ggplot(data = out, 
+                    aes(x = Year,y = Amount, color = factor(Title))) + 
+            geom_point(size = 4) + 
+            labs(x = "Year", 
+                 y = " ", 
+                 title = "Grant Amount By Year") + 
+            theme(panel.grid.major = element_blank(), 
+                  panel.grid.minor = element_blank(),
+                  panel.background = element_blank(), 
+                  axis.line = element_line(colour = "black"), 
+                  legend.position="none") + 
+            scale_y_continuous(labels = scales::comma)
+            ggplotly(p)
   })
 
   
