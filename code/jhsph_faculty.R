@@ -3,7 +3,7 @@ rawtxt <- readLines("https://www.jhsph.edu/faculty/directory/facultyList.cfc?met
 splittxt <- gsub("[\\{\\}]", "", regmatches(rawtxt, gregexpr("\\{.*?\\}", rawtxt))[[1]])
 jhsph_faculty <- as.data.frame(splittxt %>% strsplit("\\\"") %>% sapply(., "[", c(4, 10, 14, 26)) %>% t())
 names(jhsph_faculty) <- c("Department", "Site", "Name", "Position")
-##remove non-faculty
+## remove non-faculty
 jhsph_faculty <- jhsph_faculty %>% filter(grepl("Professor|Scientist", Position))
 jhsph_faculty <- jhsph_faculty %>% mutate(Tenure_track = ifelse(grepl("Professor", Position), "Yes", "No"))
 
