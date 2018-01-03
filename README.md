@@ -9,8 +9,8 @@ https://marskar.shinyapps.io/scholar/ (development version)
 &
 https://jhubiostatistics.shinyapps.io/scholr/ (stable version).
 
-#### Coming soon
-We are working on adding a report download button.
+#### New feature!
+We added report download buttons for interactive HTML and static PDF reports.
 
 If you have a request for a feature, please submit a pull request or an [issue](https://github.com/adv-datasci/scholar/issues).
 
